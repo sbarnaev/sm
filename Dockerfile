@@ -8,6 +8,12 @@ RUN curl -o ioncube.tar.gz https://downloads.ioncube.com/loader_downloads/ioncub
     && echo "zend_extension=ioncube_loader_lin_7.2.so" > /usr/local/etc/php/conf.d/00-ioncube.ini \
     && rm -rf ioncube.tar.gz ioncube
 
+# Добавьте эти строки для ZIP:
+RUN apt-get update && apt-get install -y \
+    libzip-dev \
+    zip \
+    && docker-php-ext-install zip pdo_mysql
+
 # Устанавливаем зависимости для Composer и модули PHP
 RUN apt-get update && apt-get install -y \
     git \
