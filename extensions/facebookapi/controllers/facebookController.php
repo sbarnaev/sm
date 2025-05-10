@@ -1,0 +1,1 @@
+<?php defined('BILLINGMASTER') or die;

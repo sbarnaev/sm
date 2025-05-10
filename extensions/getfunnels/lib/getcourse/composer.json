@@ -1,0 +1,25 @@
+{
+  "name": "getcourse-ru/GetCourse-PHP-SDK",
+  "description": "GetCourse's PHP SDK for APIs",
+  "keywords": ["getcourse", "api", "sdk"],
+  "type": "library",
+  "license": "Apache2",
+  "homepage": "https://github.com/getcourse-ru/GetCourse-PHP-SDK",
+  "authors": [
+    {
+      "name": "GetCourse API",
+      "homepage": "https://github.com/getcourse-ru/GetCourse-PHP-SDK"
+    }
+  ],
+  "require": {
+    "php": ">=5.4.0",
+    "ext-curl": "*",
+    "ext-json": "*"
+  },
+  "autoload": {
+    "psr-0": {
+      "GetCourse": "lib/"
+    }
+  }
+}
+

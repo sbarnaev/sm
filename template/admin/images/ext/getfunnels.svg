@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="92" height="92" viewBox="0 0 92 92">
+  <defs>
+    <style>
+      .cls-1 {
+        font-size: 28px;
+        fill: #373a4c;
+        text-anchor: middle;
+        font-family: "SF Pro Display";
+        font-weight: 700;
+      }
+
+      .cls-2 {
+        fill: #50bea8;
+        font-size: 17px;
+        font-weight: 800;
+      }
+    </style>
+  </defs>
+  <text id="GET_FUNNELS" data-name="GET FUNNELS" class="cls-1" x="46" y="47"><tspan x="46">GET</tspan><tspan class="cls-2" x="46" dy="20.4">FUNNELS</tspan></text>
+</svg>

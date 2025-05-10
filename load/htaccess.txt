@@ -1,0 +1,4 @@
+RewriteEngine on  
+# Скачивание только с вашего домена
+RewriteCond %{HTTP_REFERER} !^http://billing-master.ru/ [nc]
+RewriteRule .*.(djvu|pdf|rar|zip|mp3|wmv|flv|avi|wma)$ http://billing-master.ru/oops.html [nc]

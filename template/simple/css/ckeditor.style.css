@@ -1,0 +1,92 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;1,400;1,600&display=swap');
+
+body {
+	margin: 0;
+	padding: 20px;
+	font-family: 'Montserrat', sans-serif;
+	font-size: 14px;
+	line-height: 1.5;
+	color: #373A4C;
+	font-weight: 400;
+	background-color: #fff;
+	border-top-left-radius: 8px;
+	border-top-right-radius: 8px;
+	overflow: hidden;
+}
+p, ul, ol, dl, blockquote, pre, address, fieldset, figure {
+	margin: 0 0 15px 0;
+}
+p:last-child, ul:last-child, ol:last-child, dl:last-child,
+blockquote:last-child, pre:last-child, address:last-child,
+fieldset:last-child, figure:last-child {
+	margin-bottom: 0;
+}
+/* preserved spaces for rtl list item bullets. (#6249)*/
+ol,ul,dl {
+	padding-right:40px;
+}
+
+h1,h2,h3,h4 {
+	font-family: Georgia, Times, serif;
+}
+
+h1.lightBlue {
+	color: #00A6C7;
+	font-size: 1.8em;
+	font-weight:normal;
+}
+
+h3.green {
+	color: #739E39;
+	font-weight:normal;
+}
+
+span.markYellow { background-color: yellow; }
+span.markGreen { background-color: lime; }
+
+img.left {
+	padding: 5px;
+	margin-right: 5px;
+	float:left;
+	border:2px solid #DDD;
+}
+
+img.right {
+	padding: 5px;
+	margin-right: 5px;
+	float:right;
+	border:2px solid #DDD;
+}
+
+a.green {
+	color:#739E39;
+}
+
+table.grey {
+	background-color : #F5F5F5;
+}
+
+table.grey th {
+	background-color : #DDD;
+}
+
+ul.square {
+	list-style-type : square;
+}
+
+.cke_top {
+	background-color: #282f3a;
+	border-top-left-radius: 8px;
+	border-top-right-radius: 8px;
+}
+.cke_contents {
+	border-bottom-right-radius: 8px;
+	border-bottom-left-radius: 8px;
+}
+img {
+	max-width: 100%;
+	height: auto;
+}
+.cke_widget_image {
+	max-width: 100%;
+}

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templateData>
+<templateName>Master</templateName>
+<authorName>Oleg Kasyanov</authorName>
+<createDate>December 2019</createDate>
+<positions>
+	<position>full_slide</position>
+	<position>sidebar</position>
+	<position>top</position>
+	<position>contentbody</position>
+	<position>slider</position>
+	<position>aftertext</position>
+	<position>aftertext2</position>
+	<position>bottom</position>
+	<position>footer</position>
+</positions>
+</templateData>

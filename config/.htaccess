@@ -1,0 +1,3 @@
+<Files ~ "\.(php|cgi|pl|php3|php4|php5|php6|phps|phtml|shtml|py)$">
+Deny from all
+</Files>

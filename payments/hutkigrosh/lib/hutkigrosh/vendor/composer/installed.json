@@ -1,0 +1,81 @@
+[
+    {
+        "name": "apache/log4php",
+        "version": "2.3.0",
+        "version_normalized": "2.3.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://git-wip-us.apache.org/repos/asf/logging-log4php.git",
+            "reference": "cac428b6f67d2035af39784da1d1a299ef42fcf2"
+        },
+        "require": {
+            "php": ">=5.2.7"
+        },
+        "time": "2012-10-26T09:13:25+00:00",
+        "type": "library",
+        "installation-source": "source",
+        "autoload": {
+            "classmap": [
+                "src/main/php/"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "Apache-2.0"
+        ],
+        "description": "A versatile logging framework for PHP",
+        "homepage": "http://logging.apache.org/log4php/",
+        "keywords": [
+            "log",
+            "logging",
+            "php"
+        ]
+    },
+    {
+        "name": "esas/hutkigrosh-api-php",
+        "version": "v1.5.0",
+        "version_normalized": "1.5.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/esasby/hutkigrosh-api-php.git",
+            "reference": "2e0e2cef8e46605fbe59c061c51b894f6b3f16aa"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/esasby/hutkigrosh-api-php/zipball/2e0e2cef8e46605fbe59c061c51b894f6b3f16aa",
+            "reference": "2e0e2cef8e46605fbe59c061c51b894f6b3f16aa",
+            "shasum": ""
+        },
+        "require": {
+            "apache/log4php": "2.3.0",
+            "ext-curl": "*",
+            "ext-json": "*",
+            "php": ">= 5.5.0"
+        },
+        "time": "2018-09-25T08:51:45+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "": "src"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Esas",
+                "email": "hutkigrosh@esas.com"
+            }
+        ],
+        "description": "Hutkigrosh API library",
+        "keywords": [
+            "api",
+            "esas",
+            "hutkigrosh",
+            "payment gateway"
+        ]
+    }
+]

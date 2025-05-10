@@ -1,0 +1,2083 @@
+CREATE TABLE `#PREFIX#acl` (
+  `acl_id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `permissions` text,
+  PRIMARY KEY (`acl_id`),
+  KEY `user_id` (`user_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#action_log` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `extension` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'расширение: курсы, блог и т.д.',
+  `method` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'новый, редактировать, удалить',
+  `item` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'тип объекта: пост, категория, заказ и т.д',
+  `item_id` int(11) NOT NULL DEFAULT '0',
+  `date` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL DEFAULT '0',
+  `data` text COLLATE utf8mb4_unicode_ci,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE `#PREFIX#aff_partner_data` (
+  `user_id` int(11) NOT NULL,
+  `hits` int(11) NOT NULL,
+  `requsits` varchar(255) DEFAULT NULL,
+  `ref_id` int(11) NOT NULL DEFAULT '0' COMMENT 'Id от кого пришёл',
+  `custom_comiss` int(11) DEFAULT NULL COMMENT 'индивид. комиссия партнёра',
+  `postbacks` longtext COMMENT 'постбеки для партнёрки',
+  `fb_pixel` text,
+  PRIMARY KEY (`user_id`),
+  KEY `userid` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#aff_short_links` (
+  `link_id` int(11) NOT NULL AUTO_INCREMENT,
+  `partner_id` int(11) NOT NULL,
+  `url` varchar(255) NOT NULL,
+  `link_desc` varchar(255) DEFAULT NULL,
+  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`link_id`),
+  KEY `partner_id` (`partner_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE `#PREFIX#aff_stat_hits` (
+  `partner_id` int(11) NOT NULL,
+  `date` date NOT NULL,
+  `hits` int(11) NOT NULL,
+  PRIMARY KEY (`partner_id`,`date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#aff_transaction` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `order_id` int(11) DEFAULT NULL,
+  `product_id` int(11) NOT NULL COMMENT 'id продукта',
+  `summ` int(11) NOT NULL,
+  `pay` int(11) NOT NULL COMMENT 'выплачено ',
+  `type` int(11) NOT NULL,
+  `date` int(11) NOT NULL,
+  `client_email` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `userid` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#amocrm` (
+  `lead_id` int(11) NOT NULL,
+  `contact_id` int(11) NOT NULL,
+  `order_id` int(11) NOT NULL,
+  `statistics_data` text,
+  `partners_data` text,
+  `installment_map_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`lead_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#author_transaction` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `order_id` int(11) DEFAULT NULL,
+  `product_id` int(11) DEFAULT NULL,
+  `summ` int(11) NOT NULL,
+  `pay` int(11) NOT NULL,
+  `type` int(11) NOT NULL,
+  `date` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `userid` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#blog_posts` (
+  `post_id` int(11) NOT NULL AUTO_INCREMENT,
+  `rubric_id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `alias` varchar(255) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `meta_desc` text,
+  `meta_keys` text,
+  `post_img` varchar(255) DEFAULT NULL,
+  `img_alt` varchar(255) DEFAULT NULL,
+  `intro` text,
+  `text` longtext,
+  `start_date` int(11) NOT NULL,
+  `end_date` int(11) NOT NULL,
+  `create_date` int(11) NOT NULL,
+  `hits` int(11) NOT NULL,
+  `status` int(11) NOT NULL,
+  `custom_code` text,
+  `show_cover` int(11) NOT NULL DEFAULT '1' COMMENT 'показывать обложку при просмотре',
+  `author_id` mediumint(9) DEFAULT NULL,
+  `sort` smallint(6) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`post_id`),
+  KEY `rubric` (`rubric_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#blog_rubrics` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `alias` varchar(255) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `access_type` tinyint(4) NOT NULL DEFAULT '0' COMMENT 'тип доступа 0 - не выбран, 1 - по группе, 2 - по подписке',
+  `groups` text,
+  `planes` text,
+  `meta_desc` text,
+  `meta_keys` text,
+  `short_desc` text,
+  `create_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `status` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#channels` (
+  `channel_id` int(11) NOT NULL AUTO_INCREMENT,
+  `group_id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `source` varchar(100) DEFAULT NULL,
+  `medium` varchar(100) DEFAULT NULL,
+  `campaign` varchar(100) DEFAULT NULL,
+  `content` varchar(100) DEFAULT NULL,
+  `term` varchar(100) DEFAULT NULL,
+  `utm` varchar(255) NOT NULL COMMENT 'склеенная utm метка ',
+  `summ` int(11) NOT NULL,
+  `channel_desc` text,
+  `create_date` int(11) NOT NULL,
+  `hits` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`channel_id`),
+  KEY `utm` (`utm`),
+  KEY `group` (`group_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#channels_group` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `create_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#conditions` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `type` smallint(6) NOT NULL,
+  `value_xx` int(11) DEFAULT NULL,
+  `status` tinyint(4) NOT NULL,
+  `cond_desc` text,
+  `sql_data` text,
+  `use_cron` tinyint(4) NOT NULL,
+  `period` int(11) DEFAULT NULL,
+  `add_groups` text,
+  `del_groups` text,
+  `send_letter` tinyint(4) NOT NULL,
+  `subject` varchar(255) DEFAULT NULL,
+  `letter` longtext,
+  `delivery_id` int(11) DEFAULT NULL,
+  `unsubscribe` text,
+  `create_date` int(11) NOT NULL,
+  `next_action` int(11) DEFAULT NULL,
+  `send_sms` tinyint(4) NOT NULL DEFAULT '0',
+  `message` text,
+  PRIMARY KEY (`id`),
+  KEY `type` (`type`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#course` (
+  `course_id` int(11) NOT NULL AUTO_INCREMENT,
+  `cat_id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `meta_desc` varchar(255) DEFAULT NULL,
+  `meta_keys` varchar(255) DEFAULT NULL,
+  `alias` varchar(255) NOT NULL,
+  `course_desc` text,
+  `short_desc` varchar(255) DEFAULT NULL,
+  `cover` varchar(255) DEFAULT NULL,
+  `img_alt` varchar(255) DEFAULT NULL,
+  `padding` varchar(50) DEFAULT NULL,
+  `auto_train` tinyint(4) NOT NULL COMMENT 'автотренинг, да/нет',
+  `type_access_buy` tinyint(4) NOT NULL COMMENT 'тип ссылки при покупке доступа: 0 - нет, 1-страница заказа, 2 - лендинг, 3-своя ссылка ',
+  `product_access` int(11) DEFAULT NULL COMMENT 'id продукта для покупки доступа',
+  `link_access` varchar(255) DEFAULT NULL COMMENT 'ссылка для покупки доступа',
+  `show_lessons_count` tinyint(4) NOT NULL COMMENT 'показывать кол-во уроков в курсе',
+  `show_desc` tinyint(4) NOT NULL COMMENT 'показывать описание на странице списка уроков',
+  `show_progress` tinyint(4) NOT NULL COMMENT 'показывать прогресс прохождения',
+  `show_comments` tinyint(4) NOT NULL COMMENT 'показывать кол-во комментариев к урокам курса',
+  `show_hits` tinyint(4) NOT NULL COMMENT 'показывать кол-во просмотров уроков',
+  `show_pupil` tinyint(4) NOT NULL COMMENT 'показывать тех кто прошёл курс + количество',
+  `show_begin` tinyint(4) NOT NULL DEFAULT '0',
+  `sort` smallint(6) NOT NULL,
+  `sort_less` int(11) NOT NULL COMMENT 'сортировка уроков',
+  `prof_id` int(11) NOT NULL,
+  `curators` text COMMENT 'id кураторов курса',
+  `create_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `start_date` int(11) DEFAULT NULL,
+  `end_date` int(11) DEFAULT NULL,
+  `sertificate_id` int(11) NOT NULL,
+  `status` tinyint(4) NOT NULL,
+  `author_id` int(11) DEFAULT NULL,
+  `free_lessons` tinyint(4) NOT NULL DEFAULT '0' COMMENT 'кол-во бесплатных первых уроков',
+  `show_in_main` tinyint(4) NOT NULL DEFAULT '1' COMMENT 'показывать на главной курсов',
+  `is_free` tinyint(4) NOT NULL DEFAULT '0',
+  `button_text` varchar(60) DEFAULT NULL COMMENT 'текст на кнопке купить',
+  `view_desc` text COMMENT 'вариант просмотра описания курса: лендинг или ссылка',
+  `access_type` tinyint(4) NOT NULL DEFAULT '0' COMMENT 'тип доступа к курсу:0 - не выбран, 1-по группе, 2 по подписке, 9 - свободный	',
+  `groups` text COMMENT 'список групп доступа',
+  `access` text COMMENT 'список планов для доступа',
+  PRIMARY KEY (`course_id`),
+  KEY `index` (`cat_id`),
+  KEY `is_free` (`is_free`)
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#course_answers` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `parent_id` int(11) NOT NULL,
+  `course_id` int(11) DEFAULT NULL,
+  `lesson_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `status` int(11) NOT NULL COMMENT '1 - отвечен, 0 - не отвечено',
+  `date` int(11) NOT NULL,
+  `body` longtext NOT NULL,
+  `attach` text,
+  PRIMARY KEY (`id`),
+  KEY `lesson` (`lesson_id`),
+  KEY `parent` (`parent_id`),
+  KEY `lesson_id` (`lesson_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#course_category` (
+  `cat_id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `alias` varchar(255) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `meta_desc` varchar(255) DEFAULT NULL,
+  `meta_keys` varchar(255) DEFAULT NULL,
+  `cat_desc` text,
+  `cover` varchar(255) DEFAULT NULL,
+  `img_alt` varchar(255) DEFAULT NULL,
+  `status` int(11) NOT NULL,
+  PRIMARY KEY (`cat_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#course_lesson_map` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `lesson_id` int(11) NOT NULL,
+  `course_id` int(11) NOT NULL,
+  `status` int(11) NOT NULL COMMENT '0 - не проверен, 1 - зачёт, 9 - автозачёт для крона',
+  `date` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user` (`user_id`),
+  KEY `lesson` (`lesson_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#course_lessons` (
+  `lesson_id` int(11) NOT NULL AUTO_INCREMENT,
+  `course_id` int(11) NOT NULL,
+  `block_id` int(11) DEFAULT NULL,
+  `name` varchar(255) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `meta_desc` varchar(255) DEFAULT NULL,
+  `meta_keys` varchar(255) DEFAULT NULL,
+  `alias` varchar(255) NOT NULL,
+  `less_desc` text,
+  `cover` varchar(255) DEFAULT NULL,
+  `img_alt` varchar(255) DEFAULT NULL,
+  `access_type` varchar(35) NOT NULL,
+  `access` text,
+  `groups` text,
+  `content` longtext NOT NULL,
+  `video_urls` text,
+  `audio_urls` text,
+  `attach` text,
+  `attach_title` varchar(255) DEFAULT NULL COMMENT 'Заголовок для вложения',
+  `dopmat` text,
+  `task_type` int(11) DEFAULT NULL COMMENT '0 - нет задания, 1 - без проверки, 2 - авто, 3 - ручная',
+  `task` text,
+  `task_time` int(11) DEFAULT NULL COMMENT 'время задержки для автопроверки, минуты',
+  `allow_comments` int(11) NOT NULL,
+  `sort` int(11) NOT NULL,
+  `show_comments` int(11) NOT NULL COMMENT 'показывать иконку и кол-во комментариев',
+  `show_hits_count` int(11) NOT NULL COMMENT 'показывать кол-во просмотров',
+  `create_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `public_date` int(11) NOT NULL,
+  `end_date` int(11) NOT NULL,
+  `rating` int(11) NOT NULL,
+  `hits` int(11) NOT NULL,
+  `type_access_buy` int(11) NOT NULL COMMENT 'тип ссылки при покупке доступа: 0 - как в курсе, 1-страница заказа, 2 - лендинг, 3-своя ссылка ',
+  `product_access` int(11) DEFAULT NULL COMMENT 'id продукта для покупки доступа',
+  `link_access` varchar(255) DEFAULT NULL COMMENT 'ссылка для покупки доступа',
+  `status` int(11) NOT NULL,
+  `custom_code` text,
+  `duration` int(11) DEFAULT NULL COMMENT 'продолжительность в минутах',
+  `timing` smallint(6) NOT NULL DEFAULT '0' COMMENT 'открытие по расписанию',
+  `timing_period` varchar(5) DEFAULT NULL COMMENT 'период для задержки: часы, дни, недели',
+  `custom_code_up` text COMMENT 'произвольный код в начале урока',
+  PRIMARY KEY (`lesson_id`),
+  KEY `course` (`course_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=74 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#course_lessons_blocks` (
+  `block_id` int(11) NOT NULL AUTO_INCREMENT,
+  `course_id` int(11) NOT NULL,
+  `sort` int(11) DEFAULT NULL,
+  `block_name` varchar(255) NOT NULL,
+  PRIMARY KEY (`block_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#course_mat_cats` (
+  `cat_id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  PRIMARY KEY (`cat_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#course_materials` (
+  `mat_id` int(11) NOT NULL AUTO_INCREMENT,
+  `file` text,
+  `name` varchar(255) NOT NULL,
+  `create_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `cat_id` int(11) NOT NULL,
+  PRIMARY KEY (`mat_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#course_professions` (
+  `prof_id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `alias` varchar(255) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `prof_desc` text,
+  `meta_desc` varchar(255) DEFAULT NULL,
+  `meta_keys` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`prof_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#course_sertificate` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `file` varchar(255) NOT NULL,
+  `create_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `status` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#cron_logs` (
+  `jobs_cron` varchar(20) DEFAULT NULL COMMENT 'Тип задания в кроне',
+  `last_run` int(11) DEFAULT NULL COMMENT 'Последнее время выполнения задания',
+  `jobs_error` tinyint(1) DEFAULT '0' COMMENT 'Ошибки в заданиях крона',
+  `text_error` text COMMENT 'Полное сообщение ошибки',
+  UNIQUE KEY `jobs_cron` (`jobs_cron`,`jobs_error`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#email_delivery` (
+  `delivery_id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `delivery_desc` text,
+  `type` int(11) NOT NULL COMMENT 'тип: 1 - массовая, 2 - автосерия',
+  `send_time` int(11) NOT NULL COMMENT 'время отправки',
+  `create_date` int(11) NOT NULL,
+  `sent` text NOT NULL COMMENT 'список адресатов',
+  `ex_sent` text NOT NULL COMMENT 'список исключений',
+  `count_letters` int(11) NOT NULL COMMENT 'подсчёт кол-ва получателей для массовой',
+  `confirmation` int(11) NOT NULL COMMENT 'подтверждение: 0 - нет, 1- всегда, 2 - только через форму',
+  `confirm_subject` varchar(255) DEFAULT NULL COMMENT 'тема письма подтверждения',
+  `confirm_body` longtext COMMENT 'текст письма подтверждения',
+  `after_confirm_text` longtext COMMENT 'текст после подтверждения',
+  `count_bad` int(11) NOT NULL DEFAULT '0' COMMENT 'подсчёт кол-ва плохих получателей',
+  `bad_list_id` text CHARACTER SET utf8mb4 COMMENT 'список ID юзеров с плохими email`ами',
+  PRIMARY KEY (`delivery_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#email_letter` (
+  `letter_id` int(11) NOT NULL AUTO_INCREMENT,
+  `delivery_id` int(11) NOT NULL,
+  `send_time` int(11) NOT NULL,
+  `subject` varchar(255) NOT NULL,
+  `body` longtext NOT NULL,
+  `target` longtext COMMENT 'описание задачи письма',
+  `status` int(11) NOT NULL,
+  `create_date` int(11) NOT NULL,
+  PRIMARY KEY (`letter_id`),
+  KEY `delivery` (`delivery_id`),
+  KEY `send` (`send_time`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#email_reasons` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `delivery_id` int(11) NOT NULL DEFAULT '0' COMMENT 'id рассылки',
+  `email` varchar(255) NOT NULL,
+  `reason` longtext,
+  `time` int(11) NOT NULL,
+  `type` varchar(15) NOT NULL COMMENT 'тип отписки',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#email_subs_map` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `delivery_id` int(11) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `subs_name` varchar(55) DEFAULT NULL,
+  `subs_time` int(11) NOT NULL,
+  `subs_key` varchar(255) NOT NULL,
+  `confirmed` int(11) NOT NULL COMMENT '0 или время в unix',
+  `cancelled` int(11) NOT NULL COMMENT '0 или время в unix',
+  `spam` int(11) NOT NULL COMMENT '0 или время в unix',
+  `phone` varchar(32) DEFAULT NULL COMMENT 'номер телефона',
+  PRIMARY KEY (`id`),
+  KEY `delivery` (`delivery_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#email_task` (
+  `task_id` int(11) NOT NULL AUTO_INCREMENT,
+  `delivery_id` int(11) NOT NULL,
+  `letter_id` int(11) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `send_time` int(11) NOT NULL,
+  `status` int(11) NOT NULL,
+  `letter` text,
+  PRIMARY KEY (`task_id`),
+  KEY `delivery` (`delivery_id`),
+  KEY `letter` (`letter_id`),
+  KEY `time` (`send_time`),
+  KEY `status` (`status`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#email_task_log` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `letter_id` int(11) NOT NULL,
+  `delivery_id` int(11) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `date_time` int(11) NOT NULL,
+  `action` varchar(255) NOT NULL COMMENT 'send - отправлено, error - ошибка',
+  `descript` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `letter` (`letter_id`),
+  KEY `delivery` (`delivery_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#expertsender` (
+  `product_id` int(11) NOT NULL AUTO_INCREMENT,
+  `rspndr_order` int(11) DEFAULT NULL COMMENT 'тип подписки при оформлении заказа',
+  `rspndr_pay` int(11) DEFAULT NULL COMMENT 'тип подписки при оплате заказа',
+  PRIMARY KEY (`product_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#extensions` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) NOT NULL,
+  `title` varchar(50) NOT NULL,
+  `type` varchar(20) NOT NULL COMMENT 'тип расширения',
+  `enable` int(11) NOT NULL,
+  `params` text,
+  `link` varchar(255) NOT NULL COMMENT 'Ссылка на настройки',
+  `version` varchar(20) DEFAULT NULL COMMENT 'версия',
+  `update_url` varchar(255) DEFAULT NULL COMMENT 'url обновления',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name` (`name`),
+  UNIQUE KEY `name_2` (`name`)
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#feedback` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) DEFAULT NULL,
+  `email` varchar(255) NOT NULL,
+  `text` longtext,
+  `phone` varchar(20) DEFAULT NULL,
+  `field1` varchar(255) DEFAULT NULL,
+  `field2` varchar(255) DEFAULT NULL,
+  `field3` varchar(255) DEFAULT NULL,
+  `form_id` int(11) DEFAULT '0',
+  `comment` text,
+  `create_date` int(11) NOT NULL,
+  `status` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#feedback_forms` (
+  `form_id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `form_desc` varchar(255) DEFAULT NULL,
+  `default_form` int(11) DEFAULT NULL,
+  `params` text,
+  `hits` int(11) NOT NULL DEFAULT '0',
+  `status` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`form_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#forum_cats` (
+  `cat_id` int(11) NOT NULL AUTO_INCREMENT,
+  `section_id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `alias` varchar(255) NOT NULL,
+  `cat_desc` text,
+  `metadesc` text,
+  `metakeys` text,
+  `access_type` int(11) NOT NULL COMMENT 'тип доступа',
+  `groups` text COMMENT 'список id групп',
+  `subs` text COMMENT 'список id подписок',
+  `status` int(11) NOT NULL,
+  `create_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `sort` int(11) NOT NULL,
+  PRIMARY KEY (`cat_id`),
+  KEY `section` (`section_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#forum_message` (
+  `mess_id` int(11) NOT NULL AUTO_INCREMENT,
+  `topic_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `text` longtext NOT NULL,
+  `notif` int(11) NOT NULL,
+  `status` int(11) NOT NULL,
+  `create_date` int(11) NOT NULL,
+  PRIMARY KEY (`mess_id`),
+  KEY `topic` (`topic_id`),
+  KEY `user` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#forum_sections` (
+  `section_id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `alias` varchar(255) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `section_desc` text,
+  `metadesc` text,
+  `metakeys` text,
+  `status` int(11) NOT NULL,
+  `create_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `sort` int(11) DEFAULT NULL,
+  PRIMARY KEY (`section_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#forum_topics` (
+  `topic_id` int(11) NOT NULL AUTO_INCREMENT,
+  `cat_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `topic_title` varchar(255) NOT NULL,
+  `topic_message` longtext NOT NULL,
+  `topic_img` varchar(255) DEFAULT NULL,
+  `last_update` int(11) DEFAULT NULL,
+  `create_date` int(11) NOT NULL,
+  `discussion` int(11) NOT NULL COMMENT 'обсуждение, открыто или закрыто',
+  `hits` int(11) NOT NULL,
+  `status` int(11) NOT NULL,
+  PRIMARY KEY (`topic_id`),
+  KEY `cat` (`cat_id`),
+  KEY `user` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#gallery_cats` (
+  `cat_id` int(11) NOT NULL AUTO_INCREMENT,
+  `parent_id` int(11) NOT NULL,
+  `alias` varchar(255) NOT NULL,
+  `cat_name` varchar(255) NOT NULL,
+  `cat_cover` varchar(255) DEFAULT NULL,
+  `cat_desc` varchar(255) DEFAULT NULL,
+  `cat_title` varchar(255) DEFAULT NULL,
+  `meta_desc` varchar(255) DEFAULT NULL,
+  `meta_keys` varchar(255) DEFAULT NULL,
+  `sort` int(11) NOT NULL,
+  `status` int(11) NOT NULL,
+  PRIMARY KEY (`cat_id`),
+  KEY `section_id` (`parent_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#gallery_items` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `cat_id` int(11) NOT NULL,
+  `file` varchar(255) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `item_desc` text,
+  `alt` varchar(255) DEFAULT NULL,
+  `link` varchar(255) DEFAULT NULL,
+  `status` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `cat_id` (`cat_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#installment_map` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `order_id` int(11) NOT NULL,
+  `installment_id` int(11) NOT NULL,
+  `start_summ` int(11) NOT NULL DEFAULT '0' COMMENT 'начальная сумма рассрочки',
+  `summ` int(11) NOT NULL,
+  `status` tinyint(4) NOT NULL,
+  `max_periods` tinyint(4) NOT NULL,
+  `email` varchar(60) NOT NULL,
+  `next_pay` int(11) NOT NULL,
+  `pay_actions` text,
+  `client_data` text,
+  `create_date` int(11) NOT NULL,
+  `notif` tinyint(4) NOT NULL DEFAULT '0' COMMENT 'кол-во отправленных уведомлений',
+  `after_notif` int(11) NOT NULL DEFAULT '0',
+  `next_order` int(11) NOT NULL DEFAULT '0' COMMENT 'следующий заказ для оплаты',
+  `comment` text,
+  `ahead_id` int(11) NOT NULL DEFAULT '0' COMMENT 'id заказа для досрочного погашения',
+  `second_pay` int(11) DEFAULT NULL COMMENT 'Дата для второго платежа',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#installment_map_payments` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `installment_map_id` int(11) NOT NULL,
+  `order_id` int(11) DEFAULT NULL,
+  `pay_date` int(11) NOT NULL COMMENT 'дата платежа (когда должна быть)',
+  `paid_date` int(11) DEFAULT NULL COMMENT 'дата оплаты (когда оплатил)',
+  `sum` int(11) NOT NULL,
+  `number_pay` tinyint(4) DEFAULT NULL,
+  `status` tinyint(4) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `installment_map_id` (`installment_map_id`),
+  KEY `order_id` (`order_id`),
+  KEY `pay_date` (`pay_date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#installment_tune` (
+  `id` tinyint(4) NOT NULL AUTO_INCREMENT,
+  `title` varchar(35) NOT NULL,
+  `enable` tinyint(4) NOT NULL DEFAULT '0',
+  `first_pay` float NOT NULL DEFAULT '34',
+  `other_pay` float NOT NULL,
+  `max_periods` tinyint(4) NOT NULL DEFAULT '3',
+  `period_freq` tinyint(4) NOT NULL DEFAULT '30' COMMENT 'периодичность платежей в дней',
+  `installment_rules` longtext COMMENT 'соглашение, необходимые данные для заполнения',
+  `sort` tinyint(4) NOT NULL DEFAULT '0',
+  `letters` longtext,
+  `approve` tinyint(4) NOT NULL DEFAULT '0' COMMENT 'автоодобрение',
+  `sms` text,
+  `notif` longtext COMMENT 'уведомления письма, смс',
+  `expired` tinyint(4) NOT NULL DEFAULT '3' COMMENT 'считать платёж просроченным через xx дней ',
+  `installment_desc` text,
+  `sanctions` smallint(6) NOT NULL DEFAULT '0' COMMENT 'сумма для штрафа при просрочке',
+  `minimal` int(11) NOT NULL DEFAULT '0' COMMENT 'минимальная сумма заказа',
+  `increase` int(11) NOT NULL DEFAULT '0' COMMENT 'увеличить сумму рассрочки',
+  `fields` text,
+  `prepayment` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'предоплата',
+  `date_second_payment` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#installments_to_products` (
+  `installment_id` int(11) NOT NULL,
+  `product_id` int(11) NOT NULL,
+  KEY `installment_id` (`installment_id`),
+  KEY `product_id` (`product_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#letters_settings` (
+  `setting_id` tinyint(4) NOT NULL AUTO_INCREMENT,
+  `client_letter` text,
+  `client_letter_subj` text,
+  `register_letter` text,
+  `reg_confirm_letter` text,
+  `pass_reset_letter` text,
+  `remind_letter1` text,
+  `remind_letter2` text,
+  `remind_letter3` text,
+  `remind_sms1` text,
+  `remind_sms2` text,
+  `reg_sms` text CHARACTER SET utf8mb4,
+  `org_data` longtext,
+  PRIMARY KEY (`setting_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#log_email_send` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `email` varchar(150) DEFAULT NULL,
+  `letter` text,
+  `datetime` int(11) NOT NULL,
+  `type` varchar(100) DEFAULT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `email` (`email`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#log_sms_send` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `phone` varchar(20) NOT NULL,
+  `message` text,
+  `product_id` int(11) DEFAULT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `datetime` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#member_levels` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `level_desc` varchar(255) DEFAULT NULL,
+  `create_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#member_log` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `plane_id` int(11) NOT NULL,
+  `subs_map_id` int(11) NOT NULL,
+  `end_before` int(11) NOT NULL DEFAULT '0',
+  `end_after` int(11) NOT NULL,
+  `time_prolong` int(11) NOT NULL,
+  `date` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#member_maps` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `subs_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `begin` int(11) NOT NULL,
+  `end` int(11) NOT NULL,
+  `status` int(11) NOT NULL,
+  `create_date` int(11) NOT NULL,
+  `last_update` int(11) DEFAULT NULL,
+  `update_count` smallint(6) NOT NULL DEFAULT '0' COMMENT 'кол-во продлений',
+  `send_notification` smallint(6) NOT NULL DEFAULT '0' COMMENT 'кол-во отправленных уведомлений',
+  `recurrent_cancelled` tinyint(4) DEFAULT NULL,
+  `rec_cancelled_date` int(11) DEFAULT NULL COMMENT 'дата, когда была отменена подписка',
+  `successed` tinyint(4) NOT NULL DEFAULT '0' COMMENT 'оплачено и завершено, для рассрочек и т.д.',
+  `token_member` varchar(255) DEFAULT NULL COMMENT 'токен при установочном платеже',
+  `subscription_id` varchar(100) DEFAULT NULL COMMENT 'id подписки в платёжной системе Cloudpayments и др.',
+  `lc_id` int(11) NOT NULL DEFAULT '0' COMMENT 'id лицензии',
+  PRIMARY KEY (`id`),
+  KEY `subs` (`subs_id`),
+  KEY `user` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#member_mess` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `subs_id` int(11) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `phone` varchar(32) DEFAULT NULL COMMENT 'номер телефона',
+  `send_time` int(11) NOT NULL,
+  `letter_num` int(11) NOT NULL,
+  `status` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `time` (`send_time`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#member_mess_log` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `mess_id` int(11) NOT NULL,
+  `subs_id` int(11) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `send_time` int(11) NOT NULL,
+  `letter_num` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#member_planes` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `subs_desc` varchar(255) DEFAULT NULL,
+  `lifetime` int(11) NOT NULL,
+  `period_type` varchar(10) NOT NULL DEFAULT 'Month' COMMENT 'Тип периода: Day, Week, Month',
+  `max_periods` mediumint(9) NOT NULL DEFAULT '0' COMMENT 'кол-во периодов для платежей, 0 - без ограничений',
+  `delay` int(11) DEFAULT NULL COMMENT 'задержка начала регулярных платежей',
+  `access_id` int(11) NOT NULL,
+  `del_groups` text COMMENT 'удаление групп по окончанию подписки',
+  `letter_1` text,
+  `letter_1_time` int(11) DEFAULT NULL,
+  `letter_2` text,
+  `letter_2_time` int(11) DEFAULT NULL,
+  `letter_3` text,
+  `letter_3_time` int(11) DEFAULT NULL,
+  `letter_1_subj` varchar(255) DEFAULT NULL,
+  `letter_2_subj` varchar(255) DEFAULT NULL,
+  `letter_3_subj` varchar(255) DEFAULT NULL,
+  `renewal_type` int(11) DEFAULT NULL,
+  `renewal_product` int(11) NOT NULL,
+  `renewal_link` varchar(255) DEFAULT NULL,
+  `status` int(11) NOT NULL,
+  `amount` mediumint(9) DEFAULT NULL COMMENT 'сумма регулярного платежа, пусто - будет браться сумма продукта',
+  `recurrent_label` varchar(255) DEFAULT 'Согласен на автоплатежи' COMMENT 'подпись чек бокса для рекуррентов',
+  `select_payments` text COMMENT 'использовать только указаные платёжные системы',
+  `manager_letter` text,
+  `add_groups` varchar(128) DEFAULT NULL,
+  `add_planes` varchar(255) DEFAULT NULL,
+  `recurrent_enable` tinyint(4) NOT NULL DEFAULT '1' COMMENT 'разрешать рекуррентные платежи',
+  `service_name` varchar(255) DEFAULT NULL,
+  `del_tg_chats` text COMMENT 'ID или название чатов Telegram для удаления из них пользователей при окончании пордписки',
+  `related_planes` text COMMENT 'связанные подписки',
+  `create_new` tinyint(4) NOT NULL DEFAULT '0' COMMENT 'при покупке такого же плана создавать новый подписку',
+  `prolong_active` tinyint(4) NOT NULL DEFAULT '0' COMMENT 'продлевать только активную или любую подписку',
+  `prolong_link` varchar(255) DEFAULT NULL,
+  `sms1_status` tinyint(1) NOT NULL DEFAULT '0',
+  `sms2_status` tinyint(1) NOT NULL DEFAULT '0',
+  `sms3_status` tinyint(1) NOT NULL DEFAULT '0',
+  `sms1_text` text,
+  `sms2_text` text,
+  `sms3_text` text,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#menu_items` (
+  `item_id` int(11) NOT NULL AUTO_INCREMENT,
+  `parent_id` int(11) DEFAULT NULL,
+  `type` varchar(30) NOT NULL COMMENT 'тип пункта',
+  `link` varchar(255) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `sort` int(11) NOT NULL,
+  `title` varchar(255) NOT NULL COMMENT 'title пункта',
+  `menu_id` int(11) NOT NULL,
+  `new_window` int(11) NOT NULL COMMENT 'открывать в новом окне?',
+  `status` int(11) NOT NULL,
+  `sitemap` int(11) NOT NULL COMMENT 'показывать в sitemap',
+  `changefreq` varchar(15) NOT NULL,
+  `priority` varchar(3) NOT NULL COMMENT 'приоритет 0.1 до 1.0',
+  `visible` int(11) NOT NULL COMMENT 'показывать в меню',
+  PRIMARY KEY (`item_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#order_items` (
+  `order_item_id` int(11) NOT NULL AUTO_INCREMENT,
+  `order_id` int(11) NOT NULL,
+  `product_id` int(11) NOT NULL,
+  `product_name` varchar(255) NOT NULL,
+  `type_id` int(11) NOT NULL COMMENT 'тип продукта',
+  `number` int(11) NOT NULL COMMENT 'номер в заказе',
+  `price` int(11) NOT NULL,
+  `status` int(11) NOT NULL COMMENT 'оплачен, нет, возварт',
+  `cast` varchar(20) NOT NULL COMMENT 'тип: апселл, основной',
+  `pincode` varchar(255) DEFAULT NULL COMMENT 'отправленный пинкод',
+  `split_var` int(11) DEFAULT NULL COMMENT 'вариант сплит теста',
+  `dwl_count` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`order_item_id`),
+  KEY `order_id` (`order_id`),
+  KEY `product_id` (`product_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=51 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#order_tasks` (
+  `task_id` int(11) NOT NULL AUTO_INCREMENT,
+  `order_id` int(11) NOT NULL,
+  `installment_id` int(11) DEFAULT NULL,
+  `products` varchar(128) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `order_stage` int(11) NOT NULL COMMENT '1 - выписка счёта, 2 - рассрочка (создание), 3 - выписка счёта для рассроки (по крону), 4 - апселлы, 5 - оплата заказа',
+  `status` int(11) NOT NULL DEFAULT '0' COMMENT '0 - не обработано, 1 - взято на обработку, 2 - обработано, 3 - обработано с ошибкой',
+  `processed_date` int(11) DEFAULT NULL,
+  PRIMARY KEY (`task_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE `#PREFIX#orders` (
+  `order_id` int(11) NOT NULL AUTO_INCREMENT,
+  `product_id` int(11) DEFAULT NULL COMMENT 'ID продукта, нужен для апселла',
+  `order_date` int(11) NOT NULL,
+  `payment_date` int(11) DEFAULT NULL,
+  `summ` int(11) DEFAULT NULL,
+  `client_name` varchar(50) NOT NULL,
+  `client_email` varchar(50) NOT NULL,
+  `client_phone` varchar(50) DEFAULT NULL,
+  `client_city` varchar(255) DEFAULT NULL,
+  `client_address` varchar(255) DEFAULT NULL,
+  `client_index` varchar(8) DEFAULT NULL,
+  `client_comment` text,
+  `admin_comment` text,
+  `payment_id` int(11) DEFAULT NULL COMMENT 'id системы оплаты',
+  `ship_method_id` int(11) DEFAULT NULL COMMENT 'метод доставки',
+  `ship_status` varchar(20) DEFAULT NULL COMMENT 'статус доставки',
+  `sale_id` int(11) DEFAULT NULL,
+  `partner_id` int(11) DEFAULT NULL,
+  `status` int(11) NOT NULL COMMENT '1- оплачен, 0 - неоплчен, 2 - требует проверки, 7 - подтверждение доставки по емейл, 9 - возврат',
+  `base_id` int(11) DEFAULT NULL COMMENT 'id продукта кому писать конверсию',
+  `visit_param` text COMMENT 'параметры визита',
+  `channel_id` int(11) DEFAULT NULL COMMENT 'id рекламного канала',
+  `dwl_time` int(11) DEFAULT NULL COMMENT 'время начала скачивания, 0 - ещё не скачано',
+  `ip` varchar(15) DEFAULT NULL,
+  `remind_letter` int(11) NOT NULL DEFAULT '0' COMMENT 'кол-во отосланных писем дожимов',
+  `order_info` text,
+  `remind_sms` tinyint(4) NOT NULL DEFAULT '0',
+  `installment_map_id` int(11) NOT NULL DEFAULT '0' COMMENT 'связь с id действующей рассрочки',
+  `utm` text,
+  `is_recurrent` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'повторный заказ',
+  `subs_id` int(11) DEFAULT '0' COMMENT 'ID подписки для продления',
+  PRIMARY KEY (`order_id`),
+  UNIQUE KEY `order_date` (`order_date`),
+  KEY `order_date_2` (`order_date`)
+) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE `#PREFIX#organization` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `org_name` varchar(150) NOT NULL,
+  `org_desc` varchar(255) DEFAULT NULL,
+  `oferta` longtext,
+  `anchors` text,
+  `requisits` text,
+  `payments` mediumtext,
+  `status` tinyint(4) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#pages` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `meta_desc` varchar(255) DEFAULT NULL,
+  `meta_keys` varchar(255) DEFAULT NULL,
+  `alias` varchar(255) NOT NULL,
+  `content` longtext,
+  `in_head` text COMMENT 'скрипты в head ',
+  `in_body` longtext COMMENT 'скрипты перед body',
+  `status` int(11) NOT NULL,
+  `custom_code` longtext,
+  `create_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `hits` int(11) DEFAULT NULL,
+  `tmpl` int(11) NOT NULL COMMENT 'использовать шаблон',
+  `curl` varchar(255) DEFAULT NULL COMMENT 'получить страницу по url',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#payment_log` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `transaction_date` int(11) NOT NULL,
+  `order_date` int(11) NOT NULL,
+  `subs_id` varchar(255) DEFAULT NULL,
+  `specify` varchar(255) DEFAULT NULL,
+  `query` text,
+  `payment_id` smallint(6) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#payments` (
+  `payment_id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) NOT NULL,
+  `title` varchar(50) NOT NULL,
+  `public_title` varchar(50) DEFAULT NULL,
+  `payment_desc` text NOT NULL,
+  `status` int(11) NOT NULL,
+  `sort` int(11) NOT NULL,
+  `params` text NOT NULL,
+  PRIMARY KEY (`payment_id`),
+  UNIQUE KEY `name` (`name`)
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#poscredit_orders` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `order_id` int(11) NOT NULL,
+  `status` tinyint(4) DEFAULT NULL,
+  `profile_id` int(11) DEFAULT NULL,
+  `client_status` tinyint(1) DEFAULT NULL,
+  `bank` varchar(128) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `order_id` (`order_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#product_category` (
+  `cat_id` int(11) NOT NULL AUTO_INCREMENT,
+  `cat_name` varchar(255) NOT NULL,
+  `cat_alias` varchar(255) NOT NULL,
+  `cat_title` varchar(255) NOT NULL,
+  `cat_desc` varchar(255) DEFAULT NULL,
+  `cat_meta_desc` varchar(255) NOT NULL,
+  `cat_keys` varchar(255) NOT NULL,
+  PRIMARY KEY (`cat_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#product_install_act` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `product_id` int(11) NOT NULL,
+  `actions` text,
+  PRIMARY KEY (`id`),
+  KEY `product_id` (`product_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#product_types` (
+  `type_id` int(11) NOT NULL AUTO_INCREMENT,
+  `type_name` varchar(50) NOT NULL,
+  `type_title` varchar(50) NOT NULL,
+  PRIMARY KEY (`type_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#products` (
+  `product_id` int(11) NOT NULL AUTO_INCREMENT,
+  `product_name` varchar(90) NOT NULL,
+  `product_alias` varchar(70) NOT NULL,
+  `product_title` varchar(75) DEFAULT NULL,
+  `product_cover` varchar(60) DEFAULT NULL,
+  `img_alt` varchar(70) DEFAULT NULL,
+  `link` varchar(255) DEFAULT NULL,
+  `product_amt` smallint(6) DEFAULT NULL COMMENT 'количество на складе',
+  `show_amt` tinyint(4) NOT NULL COMMENT 'Показывать кол-во доступного товара',
+  `letter` text,
+  `letter_subject` text,
+  `cat_id` smallint(6) NOT NULL,
+  `type_id` tinyint(4) NOT NULL COMMENT '1- цифра, 2 - физический, 3 - подписка',
+  `product_desc` text,
+  `product_text1` longtext,
+  `product_text2` longtext,
+  `text1_tmpl` tinyint(4) NOT NULL COMMENT 'шаблон текста лендинга',
+  `text2_tmpl` tinyint(4) NOT NULL COMMENT 'шаблон текста лендинга',
+  `text1_head` text COMMENT 'стили иa скрипты в head',
+  `text2_head` text,
+  `text1_bottom` text COMMENT 'стили иa скрипты перед /body',
+  `text2_bottom` text,
+  `text1_heading` tinyint(4) DEFAULT NULL COMMENT 'показать заголовок h1 для продукта',
+  `text2_heading` tinyint(4) DEFAULT NULL COMMENT 'показать заголовок h1 для продукта',
+  `price` int(11) NOT NULL,
+  `red_price` int(11) DEFAULT NULL,
+  `in_catalog` tinyint(4) NOT NULL,
+  `hidden_price` tinyint(4) NOT NULL DEFAULT '0' COMMENT 'скрыть цену в каталоге',
+  `in_partner` tinyint(4) NOT NULL,
+  `group_id` varchar(255) DEFAULT NULL COMMENT 'группы для юзера',
+  `del_group_id` varchar(255) DEFAULT NULL COMMENT 'удаление групп юзера',
+  `delivery_sub` text,
+  `delivery_unsub` text COMMENT 'отписать от рассылок',
+  `notif_url` varchar(255) DEFAULT NULL,
+  `author1` int(4) DEFAULT NULL,
+  `author2` int(4) DEFAULT NULL,
+  `author3` int(4) DEFAULT NULL,
+  `type_comiss1` varchar(10) DEFAULT NULL,
+  `type_comiss2` varchar(10) DEFAULT NULL,
+  `type_comiss3` varchar(10) DEFAULT NULL,
+  `comiss1` mediumint(9) DEFAULT NULL,
+  `comiss2` mediumint(9) DEFAULT NULL,
+  `comiss3` mediumint(9) DEFAULT NULL,
+  `subscription_id` mediumint(9) DEFAULT NULL,
+  `meta_desc` varchar(255) DEFAULT NULL,
+  `meta_keys` varchar(255) DEFAULT NULL,
+  `base_id` mediumint(9) DEFAULT NULL,
+  `complect_params` text COMMENT 'название, список, выделение',
+  `price_layout` tinyint(4) NOT NULL DEFAULT '0' COMMENT 'макет вывода комплектаций',
+  `complect_sort` tinyint(4) NOT NULL DEFAULT '0' COMMENT 'сортировка комплектации',
+  `status` tinyint(4) NOT NULL,
+  `pincodes` longtext,
+  `upsell_1` smallint(4) DEFAULT NULL,
+  `upsell_2` smallint(4) DEFAULT NULL,
+  `upsell_3` smallint(4) DEFAULT NULL,
+  `upsell_1_desc` text,
+  `upsell_2_desc` text,
+  `upsell_3_desc` text,
+  `upsell_1_text` longtext,
+  `upsell_2_text` longtext,
+  `upsell_3_text` longtext,
+  `upsell_1_price` mediumint(9) DEFAULT NULL,
+  `upsell_2_price` mediumint(9) DEFAULT NULL,
+  `upsell_3_price` mediumint(9) DEFAULT NULL,
+  `ads` varchar(255) DEFAULT NULL COMMENT 'ссылка на zip архив с рекламными материалами',
+  `hits_1` mediumint(9) NOT NULL COMMENT 'просмотры 1 варианта текста',
+  `hits_2` mediumint(9) NOT NULL COMMENT 'просмотры 2 варианта текста',
+  `button_text` varchar(30) NOT NULL DEFAULT 'Заказать',
+  `code_price_box` longtext,
+  `custom_code` text,
+  `show_reviews` tinyint(4) NOT NULL COMMENT 'показывать отзывы',
+  `show_price_box` tinyint(4) NOT NULL DEFAULT '1',
+  `external_landing` tinyint(4) NOT NULL DEFAULT '0' COMMENT 'внешний лендинг',
+  `external_url` varchar(255) DEFAULT NULL,
+  `run_aff` tinyint(4) NOT NULL DEFAULT '1' COMMENT 'включить партнёрку для продукта',
+  `acymailing` text,
+  `auto_add` text COMMENT 'автодобавление товаров к заказу',
+  `product_comiss` tinyint(4) NOT NULL DEFAULT '0' COMMENT '% комиссии для продукта',
+  `send_pass` tinyint(4) NOT NULL DEFAULT '2' COMMENT 'отправлять логин и пароль',
+  `redirect_after` text COMMENT 'редирект для free продукта',
+  `manager_letter` text,
+  `note` text COMMENT 'служебное примечание',
+  `sort` smallint(6) DEFAULT NULL,
+  `installment` tinyint(4) NOT NULL DEFAULT '0' COMMENT 'разрешить покупку в рассрочку 0 - нет, 1 - всегда д, 2 - только через платёжные системы, 3 - только внутри системы',
+  `installment_action` text,
+  `installment_addgroups` tinyint(4) NOT NULL DEFAULT '0' COMMENT 'при оплате в рассрочку добавлять только группы рассрочки',
+  `service_name` varchar(256) NOT NULL DEFAULT '' COMMENT 'служебное название для товаров',
+  `price_minmax` text,
+  `to_resale` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'товар для повторной продажи',
+  `select_payments` text COMMENT 'использовать только указаные платёжные системы',
+  `sell_once` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'продавать продукт один раз',
+  PRIMARY KEY (`product_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#products_http_notices` (
+  `notice_id` int(11) NOT NULL AUTO_INCREMENT,
+  `product_id` int(11) NOT NULL,
+  `notice_name` varchar(64) NOT NULL,
+  `notice_url` varchar(256) NOT NULL,
+  `send_type` tinyint(4) NOT NULL,
+  `send_time_type` tinyint(4) NOT NULL DEFAULT '2' COMMENT 'момент отправки уведомления: 1 - перед оплатой зака, 2 - после оплаты заказа',
+  `vars` text,
+  `is_send_utm` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`notice_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#products_org` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `product_id` int(11) NOT NULL,
+  `org_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#products_promo` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `product_id` int(11) NOT NULL,
+  `duration` int(11) NOT NULL DEFAULT '1' COMMENT 'время действия, дней',
+  `promo_word` varchar(20) DEFAULT NULL,
+  `type_discount` varchar(10) NOT NULL DEFAULT 'summ',
+  `discount` int(11) NOT NULL DEFAULT '0',
+  `products` text,
+  `status` tinyint(4) NOT NULL DEFAULT '1',
+  `promo_desc` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `product_id` (`product_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#products_related` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `base_id` int(11) NOT NULL,
+  `product_id` int(11) NOT NULL,
+  `price` int(11) DEFAULT NULL,
+  `offer_desc` text,
+  `show_complect` int(11) NOT NULL DEFAULT '0',
+  `status` int(11) NOT NULL,
+  `sort` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `product_id` (`product_id`),
+  KEY `base_id` (`base_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#products_reminders` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `product_id` int(11) NOT NULL,
+  `status` tinyint(4) NOT NULL DEFAULT '0',
+  `remind_letter1` text,
+  `remind_letter2` text,
+  `remind_letter3` text,
+  `remind_sms1` text,
+  `remind_sms2` text,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `product_id` (`product_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#redirect` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `cat_id` int(11) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `rdr_desc` varchar(255) DEFAULT NULL,
+  `url` varchar(255) NOT NULL,
+  `alt_url` varchar(255) DEFAULT NULL,
+  `hits` int(11) NOT NULL,
+  `limit_hits` int(11) DEFAULT NULL COMMENT 'лимит переходов',
+  `end_date` int(11) DEFAULT NULL COMMENT 'работает до',
+  `create_date` int(11) NOT NULL,
+  `status` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `category` (`cat_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#redirect_cats` (
+  `cat_id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `cat_desc` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`cat_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#reviews` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `cat_id` int(11) DEFAULT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `product_id` int(11) DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  `name` varchar(255) NOT NULL,
+  `text` text NOT NULL,
+  `rate` int(11) DEFAULT NULL,
+  `status` int(11) NOT NULL,
+  `create_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `attach` varchar(255) DEFAULT NULL,
+  `site_url` varchar(255) DEFAULT NULL,
+  `vk_url` varchar(255) DEFAULT NULL,
+  `fb_url` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `cat_id` (`cat_id`),
+  KEY `product_id` (`product_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#reviews_cats` (
+  `cat_id` int(11) NOT NULL AUTO_INCREMENT,
+  `cat_name` varchar(255) NOT NULL,
+  `cat_alias` varchar(255) NOT NULL,
+  `create_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `status` int(11) NOT NULL,
+  PRIMARY KEY (`cat_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#reviews_labels` (
+  `label_id` int(11) NOT NULL AUTO_INCREMENT,
+  `label_name` varchar(255) NOT NULL,
+  `label_alias` varchar(255) NOT NULL,
+  `create_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `status` int(11) NOT NULL,
+  PRIMARY KEY (`label_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#reviews_labels_map` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `label_id` int(11) NOT NULL,
+  `review_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `tag_id` (`label_id`),
+  KEY `review_id` (`review_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#sales` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `sale_desc` text,
+  `type` tinyint(4) NOT NULL,
+  `start` int(11) NOT NULL,
+  `finish` int(11) NOT NULL,
+  `promo_code` varchar(100) DEFAULT NULL,
+  `partner_id` int(11) DEFAULT NULL,
+  `discount` int(11) DEFAULT NULL,
+  `discount_type` varchar(10) DEFAULT NULL,
+  `duration` int(11) DEFAULT NULL,
+  `status` tinyint(4) NOT NULL,
+  `create_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `products` text NOT NULL,
+  `client_email` varchar(60) DEFAULT NULL COMMENT 'привязка промо кода к клиенту по емейл',
+  `promo_calc_discount` tinyint(4) NOT NULL DEFAULT '1' COMMENT 'расчет скидки для промокода: 1 - от базовой цены, 2 - от красной цены',
+  PRIMARY KEY (`id`),
+  KEY `start` (`start`),
+  KEY `finish` (`finish`)
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#sales_page` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `param` text,
+  `page_text` text,
+  `page_code` text,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#segments` (
+  `sid` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `seg_desc` text,
+  `create_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`sid`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#segments_urls` (
+  `url_id` int(11) NOT NULL AUTO_INCREMENT,
+  `sid` int(11) NOT NULL,
+  `url` varchar(255) NOT NULL,
+  `url_desc` text,
+  `create_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`url_id`),
+  KEY `segment_id` (`sid`),
+  KEY `url` (`url`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#segments_user_map` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `sid` int(11) NOT NULL,
+  `count` int(11) NOT NULL,
+  `last_update` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  KEY `segment_id` (`sid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#settings` (
+  `setting_id` tinyint(11) NOT NULL AUTO_INCREMENT,
+  `script_url` varchar(70) NOT NULL,
+  `license_key` text NOT NULL COMMENT 'Лицензия',
+  `secret_key` varchar(50) NOT NULL COMMENT 'Для API',
+  `debug_mode` tinyint(11) NOT NULL COMMENT 'показ ошибок',
+  `lang` varchar(10) NOT NULL,
+  `site_name` text,
+  `currency` varchar(15) NOT NULL,
+  `cookie` varchar(20) NOT NULL,
+  `cover` text COMMENT 'логотип или аватар',
+  `show_items` tinyint(11) NOT NULL COMMENT 'кол-во записей в таблице по-умолчанию',
+  `security_key` varchar(50) NOT NULL COMMENT 'Для админки',
+  `enable_catalog` tinyint(11) NOT NULL,
+  `enable_reviews` tinyint(11) NOT NULL,
+  `enable_landing` tinyint(11) NOT NULL COMMENT 'Показ страниц продуктов',
+  `enable_sale` tinyint(11) NOT NULL COMMENT 'включить продажи',
+  `enable_cabinet` tinyint(11) NOT NULL COMMENT 'включить личный кабинет клиента',
+  `enable_feedback` tinyint(11) NOT NULL COMMENT 'включить обратную связь',
+  `write_feedback` tinyint(11) NOT NULL COMMENT 'записывать сообщения',
+  `dwl_in_lk` tinyint(11) NOT NULL COMMENT 'можно ли скачивать из личного кабинета',
+  `client_letter` text,
+  `client_letter_subj` text,
+  `register_letter` text,
+  `template` varchar(30) NOT NULL,
+  `template_set` tinyint(11) NOT NULL,
+  `in_head` text NOT NULL COMMENT 'скрипты и css в head',
+  `in_body` text NOT NULL COMMENT 'скрипты и css перед body',
+  `counters` text NOT NULL COMMENT 'счётчики',
+  `counters_head` text COMMENT 'код в head ',
+  `phone` varchar(50) DEFAULT NULL,
+  `phone_link` varchar(50) DEFAULT NULL,
+  `admin_email` varchar(50) NOT NULL,
+  `support_email` varchar(50) DEFAULT NULL,
+  `use_cart` tinyint(11) NOT NULL COMMENT 'использовать корзину',
+  `request_phone` tinyint(11) NOT NULL COMMENT 'Запрашивать телефон - да/нет',
+  `order_life_time` tinyint(11) NOT NULL COMMENT 'время жизни заказа в сутках',
+  `dwl_time` smallint(11) NOT NULL COMMENT 'время жизни ссылки, часов',
+  `dwl_count` tinyint(11) NOT NULL COMMENT 'кол-во скачиваний',
+  `strict_report` tinyint(11) NOT NULL COMMENT 'документ строгой отчётности',
+  `simple_free_dwl` tinyint(11) NOT NULL COMMENT 'Позволять сразу скачивать free продукты',
+  `socbut` text COMMENT 'ссылки на соцсети',
+  `use_smtp` tinyint(11) NOT NULL,
+  `smtp_host` varchar(50) DEFAULT NULL,
+  `smtp_port` smallint(11) DEFAULT NULL,
+  `smtp_user` varchar(50) DEFAULT NULL,
+  `smtp_pass` varchar(50) DEFAULT NULL,
+  `smtp_private_key` text,
+  `smtp_domain` varchar(50) DEFAULT NULL,
+  `smtp_selector` varchar(15) DEFAULT NULL,
+  `smtp_ssl` tinyint(11) NOT NULL COMMENT 'Использовать SSL при отправке почты',
+  `sender_email` varchar(50) DEFAULT NULL COMMENT 'Email отправителя',
+  `sender_name` varchar(50) DEFAULT NULL COMMENT 'Имя отправителя',
+  `return_path` varchar(100) DEFAULT NULL,
+  `remind_letter1` text COMMENT 'письмо напоминания 1',
+  `remind_letter2` text COMMENT 'письмо напоминания 2',
+  `remind_letter3` text COMMENT 'письмо напоминания 3',
+  `remind_sms1` text,
+  `remind_sms2` text,
+  `yacounter` varchar(15) DEFAULT NULL,
+  `ga_target` int(11) NOT NULL,
+  `catalog_title` text COMMENT 'title для главной каталога',
+  `catalog_desc` text,
+  `catalog_keys` text,
+  `catalog_h1` text,
+  `reviews_tune` text,
+  `max_upload` smallint(11) NOT NULL DEFAULT '5' COMMENT 'макс размер при загрузке в МБ',
+  `show_order_note` tinyint(4) NOT NULL DEFAULT '1',
+  `split_test_enable` tinyint(4) NOT NULL DEFAULT '0' COMMENT 'включить сплит тесты',
+  `logotype` text,
+  `fix_head` tinyint(4) NOT NULL DEFAULT '0',
+  `login_redirect` tinyint(4) NOT NULL DEFAULT '1' COMMENT '0 - на тот же url, с которого пришёл, 1 - в ЛК, 2 - в мои курсы',
+  `show_telegram_nick` tinyint(4) NOT NULL DEFAULT '0',
+  `show_instagram_nick` tinyint(4) NOT NULL DEFAULT '0',
+  `show_surname` tinyint(4) NOT NULL DEFAULT '0',
+  `smsc` text,
+  `org_data` longtext COMMENT 'данные организации для чека',
+  `countries_list` text COMMENT 'список стран',
+  `session_time` smallint(4) NOT NULL DEFAULT '3' COMMENT 'время сессии',
+  `email_protection` tinyint(4) NOT NULL DEFAULT '1' COMMENT 'зищита поля email',
+  `enable_registration` tinyint(4) NOT NULL DEFAULT '0' COMMENT 'включить регистрацию пользователей',
+  `private_key` varchar(20) DEFAULT NULL COMMENT 'приватный ключ для платных заказов через api',
+  `params` mediumtext COMMENT 'поле для хранения мелких данных в json',
+  `editor` tinyint(1) NOT NULL DEFAULT '1' COMMENT 'Плагин для редактора: 1 - Trumbowyg, 2 - CKEditor',
+  `logs_life_time` smallint(4) DEFAULT '90' COMMENT 'время хранения логов',
+  PRIMARY KEY (`setting_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#settings_main_page` (
+  `settings_main_page_id` int(11) NOT NULL AUTO_INCREMENT,
+  `main_page_content` tinyint(4) NOT NULL DEFAULT '1',
+  `main_page_title` varchar(255) DEFAULT NULL,
+  `main_page_desc` varchar(255) DEFAULT NULL,
+  `main_page_keys` varchar(255) DEFAULT NULL,
+  `main_page_text` longtext,
+  `main_page_tmpl` tinyint(4) NOT NULL DEFAULT '1',
+  `slogan` varchar(60) DEFAULT NULL,
+  `copyright` text,
+  `politika_link` varchar(50) DEFAULT NULL,
+  `politika_text` longtext,
+  `oferta_link` varchar(50) DEFAULT NULL,
+  `oferta_text` longtext,
+  `external_url` varchar(255) DEFAULT NULL,
+  `sidebar` varchar(6) DEFAULT 'right',
+  `custom_css` longtext,
+  `user_menu` text,
+  PRIMARY KEY (`settings_main_page_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#ship_methods` (
+  `method_id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(25) NOT NULL,
+  `ship_desc` varchar(255) DEFAULT NULL,
+  `tax` int(11) NOT NULL,
+  `status` int(11) NOT NULL,
+  PRIMARY KEY (`method_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#split_tests` (
+  `split_id` int(11) NOT NULL AUTO_INCREMENT,
+  `product_id` int(11) NOT NULL,
+  `variant` int(11) DEFAULT NULL,
+  `order_id` int(11) NOT NULL,
+  PRIMARY KEY (`split_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#telegram_log` (
+  `log_id` int(11) NOT NULL AUTO_INCREMENT,
+  `sm_user_id` int(11) DEFAULT NULL COMMENT 'ID пользователя в системе SM',
+  `chat_id` varchar(128) DEFAULT NULL COMMENT 'ID чата Telegram',
+  `event_type` tinyint(4) NOT NULL,
+  `date` int(11) DEFAULT NULL COMMENT 'время события',
+  `user_id` int(11) DEFAULT NULL COMMENT 'ID пользователя в TG',
+  `event_value` int(11) DEFAULT NULL COMMENT 'значения для события',
+  PRIMARY KEY (`log_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#telegram_users` (
+  `user_id` int(11) DEFAULT NULL,
+  `sm_user_id` int(11) NOT NULL,
+  `user_name` varchar(128) DEFAULT NULL,
+  `first_name` varchar(128) DEFAULT NULL,
+  `last_name` varchar(128) DEFAULT NULL,
+  `hash` varchar(128) DEFAULT NULL,
+  UNIQUE KEY `sm_user_id` (`sm_user_id`),
+  UNIQUE KEY `user_id` (`user_id`),
+  UNIQUE KEY `user_id_2` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#training` (
+  `training_id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `alias` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `full_desc` text,
+  `cat_id` smallint(6) DEFAULT '0',
+  `short_desc` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `cover` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `full_cover` varchar(255) DEFAULT NULL,
+  `full_cover_param` text,
+  `img_alt` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `padding` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status` tinyint(4) DEFAULT '1',
+  `access_type` tinyint(4) DEFAULT '1',
+  `access_task_type` tinyint(4) DEFAULT NULL COMMENT 'тип доступа к заданиям: по группе, по подписке или свободный',
+  `access_task_groups` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `access_task_planes` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `access_task_global` text CHARACTER SET utf8mb4,
+  `show_train` tinyint(4) DEFAULT '1',
+  `show_form_subscribe` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci COMMENT 'показать форму для записи на тренинг, когда он не начался + выбор автосерии и выбор полей (имя, телефон)',
+  `count_lessons_type` tinyint(4) DEFAULT '1',
+  `show_desc` tinyint(4) DEFAULT '1',
+  `show_widget_progress` tinyint(4) DEFAULT '1',
+  `show_progress2list` tinyint(4) DEFAULT '1' COMMENT 'Показывать прогресс бар по тренингу в общем списке',
+  `show_comments` tinyint(4) DEFAULT '0',
+  `show_hits` tinyint(4) DEFAULT '1',
+  `show_pupil_count` tinyint(4) DEFAULT '0',
+  `show_pupil` tinyint(4) DEFAULT '0',
+  `show_start_date` tinyint(4) DEFAULT '0',
+  `show_end` tinyint(4) DEFAULT '0',
+  `show_in_main` tinyint(4) DEFAULT '1',
+  `show_in_lk2not_buy` tinyint(4) DEFAULT '1',
+  `show_before_start` tinyint(4) DEFAULT '0' COMMENT 'виден ли тренинг в кабинете до даты начала',
+  `show_lesson_cover_2mobile` tinyint(4) NOT NULL DEFAULT '0' COMMENT 'показывать обложки уроков на мобильных',
+  `start_date` int(11) DEFAULT NULL,
+  `end_date` int(11) DEFAULT NULL,
+  `start_type` tinyint(4) DEFAULT NULL,
+  `start_time_value` smallint(6) DEFAULT '0',
+  `finish_type` tinyint(4) DEFAULT NULL,
+  `finish_value` tinyint(4) DEFAULT NULL COMMENT 'значение для завершения',
+  `custom_text` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `create_date` int(11) DEFAULT NULL,
+  `sort` smallint(6) DEFAULT '0',
+  `sertificate` text COMMENT 'данные сертификата',
+  `count_free_lessons` tinyint(4) DEFAULT '0',
+  `is_free` tinyint(4) DEFAULT '0',
+  `meta_desc` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `meta_keys` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `type_access_buy` tinyint(4) DEFAULT '0' COMMENT 'тип кнопки покупки',
+  `product_access` int(11) DEFAULT '0',
+  `link_access` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `big_button` text,
+  `small_button` text,
+  `duration_type` tinyint(4) NOT NULL DEFAULT '1',
+  `count_lessons` smallint(4) DEFAULT NULL,
+  `price` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `complexity` tinyint(4) DEFAULT '0' COMMENT 'сложность',
+  `duration` varchar(255) DEFAULT NULL COMMENT 'продолжительность, считать/написать',
+  `show_count_lessons` smallint(4) DEFAULT '0',
+  `show_complexity` smallint(4) DEFAULT '0',
+  `show_price` smallint(4) DEFAULT '0',
+  `show_widget_training` tinyint(4) DEFAULT '1',
+  `sort_lessons` tinyint(4) DEFAULT '1',
+  `confirm_phone` tinyint(4) DEFAULT '0',
+  `show_watermark_email` tinyint(4) DEFAULT '0',
+  `show_watermark_phone` tinyint(4) DEFAULT '0',
+  `binding_tg` tinyint(4) DEFAULT '0',
+  `show_in_cab2not_access` tinyint(4) DEFAULT '1',
+  `allow_user_notes` tinyint(4) DEFAULT '0',
+  `authors_can_edit` tinyint(4) DEFAULT '0',
+  `curators_can_edit` tinyint(4) DEFAULT '0',
+  `curators_auto_assign` tinyint(4) DEFAULT '0',
+  `show_in_cabinet2not_access` tinyint(4) DEFAULT '0',
+  `show_in_lk2not_access` tinyint(4) DEFAULT '0',
+  `text_in_lk2not_buy` varchar(128) DEFAULT NULL,
+  `start_lessons` text COMMENT 'урок для начала прохождения',
+  `finish_lessons` text COMMENT 'урок для окончания прохождения',
+  `lock_comment` tinyint(4) NOT NULL DEFAULT '0' COMMENT 'блокировка комментариев после принятия ДЗ',
+  `homework_edit` tinyint(4) NOT NULL DEFAULT '1' COMMENT 'Возможность редактирования ДЗ до проверки куратором 1- ДА, 0 - нет',
+  `homework_comment_add` tinyint(4) NOT NULL DEFAULT '1' COMMENT 'Возможность оставлять комментарии 1 - ДА, 0 нет',
+  `on_public_homework` tinyint(4) NOT NULL DEFAULT '0' COMMENT 'включить публичные дз',
+  `by_button_curator_hw` text COMMENT 'кнопка купить по типу проверки домашнего задания Куратором',
+  `by_button_autocheck_hw` text COMMENT 'кнопка купить по типу проверки домашнего задания Автопроверка',
+  `by_button_self_hw` text COMMENT 'кнопка купить по типу проверки домашнего задания Самостоятельная',
+  `lessons_tmpl` tinyint(4) NOT NULL DEFAULT '0' COMMENT 'тип макета для уроков',
+  `subject_letter_to_curator` varchar(255) DEFAULT NULL,
+  `letter_to_curator` text,
+  `subject_letter_to_user` varchar(255) DEFAULT NULL,
+  `letter_to_user` text,
+  `subject_letter_to_user_for_open_lesson` varchar(255) DEFAULT NULL,
+  `letter_to_user_for_open_lesson` text,
+  `send_email_to_curator` tinyint(4) DEFAULT '0',
+  `send_email_to_all_curators` tinyint(4) DEFAULT '0',
+  `send_email_to_user` tinyint(4) DEFAULT '0',
+  `send_email_to_user_for_open_lesson` tinyint(4) DEFAULT '0',
+  PRIMARY KEY (`training_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#training_access_groups` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `training_id` int(11) NOT NULL,
+  `group_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#training_access_planes` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `training_id` int(11) NOT NULL,
+  `plane_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#training_answers` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `parent_id` int(11) NOT NULL DEFAULT '0',
+  `lesson_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `answer` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `create_date` int(11) NOT NULL,
+  `attach` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '0 - прочитанные ответы, 1 - прочитанные',
+  `work_link` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'ссылка на работу',
+  `type` tinyint(4) NOT NULL DEFAULT '1',
+  `sex` varchar(16) DEFAULT NULL COMMENT 'пол пользователя',
+  PRIMARY KEY (`id`),
+  KEY `lesson_id` (`lesson_id`),
+  KEY `user_id` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#training_authors_in_training` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `author_id` int(11) DEFAULT NULL,
+  `training_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=110 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#training_blocks` (
+  `block_id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `cover` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `training_id` int(11) NOT NULL DEFAULT '0',
+  `section_id` int(11) NOT NULL DEFAULT '0',
+  `sort` smallint(6) NOT NULL,
+  PRIMARY KEY (`block_id`),
+  KEY `training_id` (`training_id`),
+  KEY `section_id` (`section_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#training_cats` (
+  `cat_id` int(11) NOT NULL AUTO_INCREMENT,
+  `parent_cat` int(11) NOT NULL DEFAULT '0',
+  `name` varchar(255) NOT NULL,
+  `alias` varchar(255) NOT NULL,
+  `title` varchar(255) DEFAULT NULL,
+  `cat_desc` text,
+  `meta_desc` varchar(255) DEFAULT NULL,
+  `meta_keys` varchar(255) DEFAULT NULL,
+  `cover` varchar(255) DEFAULT NULL,
+  `img_alt` varchar(255) DEFAULT NULL,
+  `sort` tinyint(4) NOT NULL DEFAULT '1',
+  `status` tinyint(4) NOT NULL,
+  PRIMARY KEY (`cat_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#training_completed_actions2users` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `element_id` int(11) NOT NULL,
+  `element_type` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `action` tinyint(4) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE `#PREFIX#training_curator_to_user` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `curator_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `training_id` int(11) NOT NULL,
+  `section_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#training_curators_in_training` (
+  `curator_id` int(11) NOT NULL COMMENT 'Здесь ИД пользователя',
+  `training_id` int(11) NOT NULL,
+  `section_id` int(11) NOT NULL,
+  `is_master` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Если это мастер куратор в конкретном тренинге',
+  `assing_to_users` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Участвует в автоматическом распределении или нет'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#training_events_finish` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `training_id` int(11) NOT NULL,
+  `event_type` varchar(16) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `params` text CHARACTER SET utf8,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE `#PREFIX#training_home_work` (
+  `homework_id` int(11) NOT NULL AUTO_INCREMENT,
+  `task_id` int(11) NOT NULL,
+  `lesson_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `curator_id` int(11) NOT NULL COMMENT 'кто проверял',
+  `status` int(1) NOT NULL COMMENT '1 - принято, 2 - отклонено, 3 - на рассмотрении (на рассмотрении, когда куратор открыл ДЗ, чтобы другие не могли ответить), 4 - ученик прислал работу на проверку',
+  `create_date` int(11) DEFAULT NULL,
+  `public` int(11) NOT NULL COMMENT '0 - не публичное, 1 - только работа, 2 - полностью работа и комменты',
+  `mark` int(11) NOT NULL COMMENT 'оценка ДЗ',
+  `points` int(11) NOT NULL COMMENT 'баллы',
+  `test` text COMMENT 'для данных по тестам json',
+  `test_start` int(11) NOT NULL DEFAULT '0' COMMENT 'время начала теста',
+  PRIMARY KEY (`homework_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#training_home_work_comments` (
+  `comment_id` int(11) NOT NULL AUTO_INCREMENT,
+  `homework_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `parent_id` int(11) NOT NULL COMMENT 'родительское сообщение(comment_id)',
+  `comment_text` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `create_date` int(11) DEFAULT NULL,
+  `status` int(1) NOT NULL COMMENT '0 не просмотрен , 1 просмотрен куратором, 2 - отвечен',
+  `attach` text CHARACTER SET utf8mb4,
+  PRIMARY KEY (`comment_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#training_home_work_history` (
+  `history_id` int(11) NOT NULL AUTO_INCREMENT,
+  `homework_id` int(11) NOT NULL,
+  `version_id` int(11) NOT NULL,
+  `answer` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `attach` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `work_link` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'ссылка на работу',
+  `create_date` int(11) DEFAULT NULL,
+  PRIMARY KEY (`history_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#training_lesson_elements` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `type` tinyint(4) NOT NULL,
+  `lesson_id` int(11) NOT NULL,
+  `sort` smallint(4) NOT NULL,
+  `params` longtext NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=87 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#training_lessons` (
+  `lesson_id` int(11) NOT NULL AUTO_INCREMENT,
+  `training_id` int(11) NOT NULL,
+  `section_id` int(11) NOT NULL DEFAULT '0',
+  `block_id` int(11) NOT NULL,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `alias` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `cover` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `img_alt` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status` tinyint(4) NOT NULL,
+  `sort` smallint(6) NOT NULL,
+  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `less_desc` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `attach` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci COMMENT 'вложение и его заголовок',
+  `hits` int(11) NOT NULL DEFAULT '0',
+  `meta_desc` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `meta_keys` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `auto_access_lesson` tinyint(4) DEFAULT '0' COMMENT '0 - выводим кнопку для отметки прохождения, 1 - Автоматическое прохождение, когда вошел в урок',
+  `access_type` tinyint(4) NOT NULL,
+  `access_groups` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `access_planes` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `access_time_type` tinyint(4) NOT NULL DEFAULT '0' COMMENT 'доступ по времени (от начала прохождения курса, от даты регистрации, от конкретной даты, из настроек курса)',
+  `access_time_value` int(11) DEFAULT NULL COMMENT 'время открытия',
+  `duration` int(11) DEFAULT NULL COMMENT 'продолжительность',
+  `public_date` int(11) DEFAULT NULL,
+  `end_date` int(11) DEFAULT NULL,
+  `show_hits` tinyint(4) NOT NULL DEFAULT '0',
+  `show_comments` tinyint(4) DEFAULT '0',
+  `rating` float DEFAULT NULL,
+  `by_button` text COMMENT 'кнопка купить',
+  `shedule` tinyint(1) DEFAULT '1' COMMENT 'Открытие урока 1 - сразу, 2 - с задержкой',
+  `shedule_hidden` tinyint(1) NOT NULL DEFAULT '2' COMMENT 'Скрывать урок, если не подошла дата открытия. 1-да, 2-нет. По умолчанию используется 2(то есть уроки не скрываются)',
+  `shedule_type` tinyint(1) DEFAULT NULL COMMENT 'Тип открытия 1 - относительная дата, 2 - конкретная дата',
+  `shedule_relatively` tinyint(1) DEFAULT NULL COMMENT 'Относительно чего открыть, 1 - Входа в предыдущий урок, 2 - Входа в первый урок, 3 - Начало тренинга',
+  `shedule_open_date` int(11) DEFAULT NULL COMMENT 'Дата открытия, если конкретная дата',
+  `shedule_how_fast_open` tinyint(1) DEFAULT NULL COMMENT 'Как быстро открыть доступ 1- На следующий день, 2- через Х дней, 3 - Дождаться дня недели',
+  `shedule_count_days` smallint(6) DEFAULT NULL COMMENT 'Количество дней, если выбрано через Х дней',
+  `shedule_access_time_weekday` tinyint(1) DEFAULT NULL COMMENT 'День недели 1 - ПН,2 - ВТ, 3 - СР, 4 - ЧТ, 5 - ПТ, 6 - СБ, 7 - ВС',
+  `create_date` int(11) NOT NULL,
+  PRIMARY KEY (`lesson_id`),
+  KEY `training_id` (`training_id`),
+  KEY `block_id` (`block_id`),
+  KEY `section_id` (`section_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=50 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#training_liked_answers` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `answer_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#training_page_settings` (
+  `setting_id` int(11) NOT NULL AUTO_INCREMENT,
+  `params` text,
+  PRIMARY KEY (`setting_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#training_playlist_items` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `playlist_id` int(11) NOT NULL,
+  `sort` smallint(4) DEFAULT NULL,
+  `params` text NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=109 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#training_public_homework` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `lesson_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#training_questions` (
+  `quest_id` int(11) NOT NULL AUTO_INCREMENT,
+  `test_id` int(11) NOT NULL,
+  `question` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `help` text COLLATE utf8mb4_unicode_ci COMMENT 'пояснение для расшифровки',
+  `true_answer` tinyint(4) NOT NULL DEFAULT '0' COMMENT 'правильный ответ: один/много',
+  `require_all_true` tinyint(4) NOT NULL DEFAULT '0' COMMENT 'обязательно выбрать все правильные',
+  `status` tinyint(4) NOT NULL DEFAULT '1',
+  `sort` int(11) NOT NULL DEFAULT '0',
+  `image` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`quest_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE `#PREFIX#training_sections` (
+  `section_id` int(11) NOT NULL AUTO_INCREMENT,
+  `training_id` int(11) NOT NULL,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `alias` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `section_desc` text COMMENT 'описание раздела',
+  `cover` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `img_alt` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `sort` smallint(6) NOT NULL DEFAULT '0',
+  `service_header` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `start_lessons` text COMMENT 'уроки для засчитывания начала прохождения раздела',
+  `finish_lessons` text COMMENT 'уроки для засчитывания окончания прохождения раздела',
+  `by_button` text COMMENT 'кнопка купить',
+  `open_type` tinyint(4) NOT NULL DEFAULT '1' COMMENT 'тип открытия раздела: 1 - относительное время, 2 - конкретная дата',
+  `open_wait_days` smallint(4) DEFAULT NULL COMMENT 'кол-во дней до открытия раздела',
+  `open_date` int(11) DEFAULT NULL COMMENT 'дата открытия',
+  `close_type` tinyint(4) NOT NULL DEFAULT '1' COMMENT 'тип закрытия раздела',
+  `close_wait_days` smallint(4) DEFAULT NULL COMMENT 'кол-во дней до закрытия',
+  `close_date` int(11) DEFAULT NULL COMMENT 'дата закрытия',
+  `is_show_before_open` tinyint(4) NOT NULL DEFAULT '1' COMMENT 'Виден ли раздел до даты открытия',
+  `start_type` tinyint(4) NOT NULL DEFAULT '1' COMMENT 'Что считать началом прохождения',
+  `finish_type` tinyint(4) NOT NULL DEFAULT '1' COMMENT 'Что считать окончанием прохождения',
+  `image_type` tinyint(4) NOT NULL DEFAULT '1' COMMENT 'изображение: 1 - нумерация, 2 - картинка',
+  `access_type` tinyint(4) NOT NULL DEFAULT '1',
+  `access_groups` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `access_planes` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `status` tinyint(4) NOT NULL DEFAULT '1',
+  `meta_desc` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `meta_keys` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `shedule_how_fast_open` tinyint(1) DEFAULT '1' COMMENT 'Как быстро открыть доступ: 1 - через Х дней, 2 - дождаться дня недели',
+  `open_wait_weekday` tinyint(1) DEFAULT '0' COMMENT 'День недели для открытия раздела',
+  `open_skip_weekdays` tinyint(1) DEFAULT '0' COMMENT 'Пропуск перед открытием раздела (недель)',
+  PRIMARY KEY (`section_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#training_sertificates` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `training_id` int(11) NOT NULL,
+  `url` varchar(255) NOT NULL,
+  `date` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#training_task` (
+  `task_id` int(11) NOT NULL AUTO_INCREMENT,
+  `lesson_id` int(11) NOT NULL,
+  `task_type` tinyint(4) NOT NULL DEFAULT '0' COMMENT '0 - нет задания, 1 - Обычное задание, 2 - С тестированием, 3 - Только тестирование',
+  `check_type` tinyint(4) NOT NULL DEFAULT '0' COMMENT 'тип проверки ДЗ 0 - Без проверки, 1 - Автопроверка, 2 - Ручная проверка',
+  `text` text,
+  `auto_answer` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `stop_lesson` tinyint(4) NOT NULL DEFAULT '0',
+  `autocheck_time` smallint(6) DEFAULT NULL,
+  `access_type` tinyint(4) NOT NULL DEFAULT '2' COMMENT 'что нужно для открытия доступа: 1 - прохождение теста, 2 - выполнение задания, 3 - тест и задание',
+  `check_status_type` tinyint(4) NOT NULL DEFAULT '1' COMMENT 'статус проверки: 1 - зачет, 2 - баллы',
+  `access_time` tinyint(4) NOT NULL DEFAULT '1' COMMENT 'время для открытия доступа: 1 - сразу, 2 - на следующий день, 3 - через X дней, 4 - дождаться дня недели',
+  `access_time_days` smallint(4) DEFAULT NULL COMMENT 'количество дней для открытия доступа',
+  `access_time_weekday` tinyint(4) DEFAULT NULL COMMENT 'количество недель для открытия доступа',
+  `show_upload_file` tinyint(4) NOT NULL DEFAULT '1' COMMENT 'отображать поле для загрузки файла',
+  `show_work_link` tinyint(4) NOT NULL DEFAULT '0' COMMENT 'отображать поле для добавления ссылки',
+  `hint` text COMMENT 'подсказка наставнику',
+  `completed_on_time` tinyint(4) NOT NULL DEFAULT '0' COMMENT 'действие, если задание выполнено вовремя: 0 - ничего, 1 - начислить баллы, 2 - отправить сообщение, 3 - добавить в группу',
+  `not_completed_on_time` tinyint(4) NOT NULL DEFAULT '0' COMMENT 'действие, если задание не выполнено вовремя: 0 - ничего, 1 - снять баллы, 2 - отправить сообщение, 3 - удалить из группы',
+  `completed_time_add_group` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci COMMENT 'добавление в группу при выполеннии задания',
+  `completed_time_del_group` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci COMMENT 'удаление из группы при выполеннии задания',
+  PRIMARY KEY (`task_id`),
+  UNIQUE KEY `lesson_id` (`lesson_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=50 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#training_test` (
+  `test_id` int(11) NOT NULL AUTO_INCREMENT,
+  `task_id` int(11) NOT NULL,
+  `lesson_id` int(11) NOT NULL,
+  `test_desc` text,
+  `finish` int(11) NOT NULL DEFAULT '0' COMMENT 'количество баллов, которое нужно набрать',
+  `test_try` tinyint(4) NOT NULL DEFAULT '1' COMMENT 'кол-во попыток сдачи теста',
+  `test_time` int(11) NOT NULL DEFAULT '0' COMMENT 'время на прохождение теста, минуты',
+  `show_questions_count` tinyint(4) NOT NULL DEFAULT '1' COMMENT 'кол-во выводимых вопросов',
+  `help_hint_success` tinyint(4) NOT NULL DEFAULT '0' COMMENT 'показывать расшифровку если сдал',
+  `help_hint_fail` tinyint(4) NOT NULL DEFAULT '0' COMMENT 'показывать расшифровку если НЕ сдал',
+  `ratings` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci COMMENT 'оценки за прохождение теста',
+  PRIMARY KEY (`test_id`),
+  UNIQUE KEY `lesson_id` (`lesson_id`),
+  KEY `task_id` (`task_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=50 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#training_test_options` (
+  `option_id` int(11) NOT NULL AUTO_INCREMENT,
+  `quest_id` int(11) NOT NULL DEFAULT '0',
+  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `value` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `sort` tinyint(4) NOT NULL,
+  `valid` tinyint(4) NOT NULL,
+  `points` smallint(6) NOT NULL DEFAULT '0',
+  `cover` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`option_id`),
+  KEY `quest_id` (`quest_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=77 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#training_test_results` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `test_id` int(11) NOT NULL,
+  `lesson_id` int(11) NOT NULL DEFAULT '0',
+  `user_id` int(11) NOT NULL,
+  `quest_id` int(11) NOT NULL,
+  `result` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `date` int(11) NOT NULL,
+  `points` smallint(6) NOT NULL DEFAULT '0' COMMENT 'сколько баллов начислено',
+  `is_valid` tinyint(4) NOT NULL DEFAULT '0' COMMENT 'дан правильный ответ',
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  KEY `test_id` (`test_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE `#PREFIX#training_user_map` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `lesson_id` int(11) NOT NULL,
+  `training_id` int(11) NOT NULL,
+  `open` int(11) DEFAULT NULL,
+  `date` int(11) DEFAULT NULL,
+  `get_answer` int(11) DEFAULT NULL,
+  `status` tinyint(4) NOT NULL DEFAULT '0' COMMENT 'LESSON_STARTED = 0, HOMEWORK_SUBMITTED = 1, HOMEWORK_DECLINE = 2, HOMEWORK_ACCEPTED = 3, HOMEWORK_AUTOCHECK = 4',
+  `count_answer` tinyint(4) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  KEY `lesson_id` (`lesson_id`),
+  KEY `training_id` (`training_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=71 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#training_user_visits` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `training_id` int(11) NOT NULL,
+  `section_id` int(11) NOT NULL DEFAULT '0',
+  `lesson_id` int(11) NOT NULL DEFAULT '0',
+  `date` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  KEY `training_id` (`training_id`),
+  KEY `lesson_id` (`lesson_id`),
+  KEY `section_id` (`section_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=72 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#training_wiget_settings` (
+  `setting_id` int(11) NOT NULL AUTO_INCREMENT,
+  `params` text,
+  PRIMARY KEY (`setting_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#user_blacklist` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `email` varchar(255) NOT NULL,
+  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#user_groups` (
+  `group_id` int(11) NOT NULL AUTO_INCREMENT,
+  `group_name` varchar(50) NOT NULL,
+  `group_title` varchar(50) NOT NULL,
+  `group_desc` varchar(255) DEFAULT NULL,
+  `create_date` int(11) NOT NULL,
+  `del_tg_chats` text COMMENT 'ID или название чатов Telegram для удаления из них пользователей при удалении группы',
+  PRIMARY KEY (`group_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#user_groups_map` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `group_id` int(11) NOT NULL,
+  `date` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user` (`user_id`),
+  KEY `group` (`group_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=123 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#users` (
+  `user_id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_name` varchar(255) DEFAULT NULL,
+  `login` varchar(20) DEFAULT NULL,
+  `email` varchar(255) NOT NULL,
+  `phone` varchar(25) DEFAULT NULL,
+  `confirm_phone` varchar(32) DEFAULT NULL COMMENT 'подтвержденный номер телефона',
+  `city` varchar(50) DEFAULT NULL,
+  `address` varchar(255) DEFAULT NULL,
+  `zipcode` varchar(15) DEFAULT NULL,
+  `note` text,
+  `pass` varchar(255) NOT NULL,
+  `role` varchar(10) NOT NULL,
+  `is_partner` tinytext,
+  `is_client` tinyint(4) DEFAULT NULL,
+  `is_subs` tinyint(4) DEFAULT NULL COMMENT 'подписчик email рассылки',
+  `is_author` tinyint(4) DEFAULT NULL,
+  `is_curator` tinyint(4) DEFAULT NULL COMMENT 'куратор курса?',
+  `enter_time` int(11) DEFAULT NULL COMMENT 'дата фиксации системой',
+  `reg_date` int(11) DEFAULT NULL COMMENT 'дата регистрации',
+  `enter_method` varchar(20) DEFAULT NULL COMMENT 'метод входа в систему (free, paid и т.д.)',
+  `refer` varchar(255) DEFAULT NULL,
+  `channel_id` int(11) DEFAULT NULL COMMENT 'id канала привлечения',
+  `recovery` int(11) DEFAULT NULL COMMENT 'для восстановления пароля',
+  `reg_key` varchar(255) DEFAULT NULL,
+  `last_visit` int(11) DEFAULT NULL,
+  `from_id` int(11) DEFAULT NULL COMMENT 'от кого пришёл, субпартнёр',
+  `status` tinyint(4) NOT NULL COMMENT '6 - чёрный список',
+  `points` int(11) DEFAULT NULL COMMENT 'баллы юзера',
+  `surname` varchar(30) DEFAULT NULL COMMENT 'фамилия',
+  `nick_telegram` varchar(50) DEFAULT NULL,
+  `nick_instagram` varchar(50) DEFAULT NULL,
+  `vk_url` varchar(255) DEFAULT NULL,
+  `sex` varchar(7) DEFAULT NULL,
+  `level` tinyint(4) NOT NULL DEFAULT '0' COMMENT 'уровень юзера',
+  `bith_day` tinyint(4) DEFAULT NULL,
+  `bith_month` tinyint(4) DEFAULT NULL,
+  `bith_year` smallint(6) DEFAULT NULL,
+  `photo_url` text,
+  `spec_aff` tinyint(4) NOT NULL DEFAULT '0' COMMENT 'особый режим партнёрки',
+  PRIMARY KEY (`user_id`),
+  KEY `entertime` (`enter_time`),
+  KEY `email` (`email`)
+) ENGINE=InnoDB AUTO_INCREMENT=164 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#users_spec_aff` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `product_id` int(11) NOT NULL,
+  `type` tinyint(4) NOT NULL,
+  `float_scheme` text NOT NULL,
+  `comiss` smallint(6) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#widgets` (
+  `widget_id` int(11) NOT NULL AUTO_INCREMENT,
+  `widget_type` varchar(20) NOT NULL,
+  `widget_title` varchar(40) NOT NULL,
+  `widget_desc` text,
+  `position` varchar(30) DEFAULT NULL,
+  `suffix` varchar(15) DEFAULT NULL,
+  `show_header` int(11) NOT NULL DEFAULT '1',
+  `header` varchar(128) NOT NULL DEFAULT '' COMMENT 'Заголовок виджета',
+  `show_subheader` tinyint(4) NOT NULL DEFAULT '0' COMMENT 'Показывать подзаголовок виджета',
+  `subheader` varchar(128) NOT NULL DEFAULT '' COMMENT 'Подзаголовок виджета',
+  `show_right_button` tinyint(4) NOT NULL DEFAULT '0' COMMENT 'Показывать кнопку справа',
+  `right_button_name` varchar(128) NOT NULL DEFAULT '' COMMENT 'Название кнопки справа',
+  `right_button_link` varchar(256) NOT NULL DEFAULT '' COMMENT 'Ссылка кнопки справа',
+  `params` mediumtext,
+  `sort` int(11) NOT NULL,
+  `affix` int(11) NOT NULL,
+  `private` int(11) NOT NULL COMMENT 'приватный, только для зарегистрированных',
+  `status` int(11) NOT NULL,
+  `create_date` int(11) NOT NULL,
+  `show_for_course` text,
+  `show_for_training` text,
+  PRIMARY KEY (`widget_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `#PREFIX#widgets_map` (
+  `widget_id` int(11) NOT NULL,
+  `page` varchar(50) NOT NULL,
+  PRIMARY KEY (`widget_id`,`page`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO `#PREFIX#blog_rubrics` (`id`, `name`, `alias`, `title`, `meta_desc`, `meta_keys`, `short_desc`, `create_date`, `status`) VALUES
+(1, 'Без категории', 'uncat', 'Без категории', '', '', '', '2020-02-16 14:02:18', 1);
+
+INSERT INTO `#PREFIX#extensions` (`id`, `name`, `title`, `type`, `enable`, `params`, `link`, `version`, `update_url`) VALUES
+(1, 'courses', 'ONLINE_COURSES', 'system', 0, 'YToxOntzOjY6InBhcmFtcyI7YToxOTp7czoyOiJoMSI7czowOiIiO3M6NzoibGljZW5zZSI7czo0MDoiNWQxN2EyY2Q5NmEyMmMxZWMyY2E0OTIyNGE5NzAwMzNhZGE5NzU0NSI7czoxMToiY29tbWVudGhlYWQiO3M6MDoiIjtzOjExOiJjb21tZW50Y29kZSI7czowOiIiO3M6MTQ6IndpZHRoX2xlc3NfaW1nIjtzOjM6IjE2NCI7czoxMToic2hvd19ibG9ja3MiO3M6MToiMCI7czo0OiJoZXJvIjtzOjQ2OiJodHRwczovL2RlbW8uc2Nob29sLW1hc3Rlci5ydS9pbWFnZXMvaGVybzEuanBnIjtzOjg6InBvc2l0aW9uIjtzOjEzOiJjZW50ZXIgY2VudGVyIjtzOjk6Imhlcm9oZWlnaCI7czozOiI0NTAiO3M6MTU6Imhlcm9tb2JpbGVoZWlnaCI7czozOiIyNTAiO3M6MTI6Im92ZXJsYXljb2xvciI7czo3OiIjMGQwZDBkIjtzOjc6Im92ZXJsYXkiO3M6MzoiMC4xIjtzOjEwOiJoZXJvaGVhZGVyIjtzOjE5OiLQndCw0YjQuCDQutGD0YDRgdGLIjtzOjU6ImNvbG9yIjtzOjc6IiNmZmZmZmYiO3M6ODoiZm9udHNpemUiO3M6MjoiNTAiO3M6MTU6ImZvbnRzaXplX21vYmlsZSI7czoyOiIyMCI7czo1OiJ0aXRsZSI7czoyMzoi0J7QvdC70LDQudC9INC60YPRgNGB0YsiO3M6NDoiZGVzYyI7czo1Nzoi0J7QsdGD0YfQtdC90LjQtSDQvtC90LvQsNC50L0sINCx0L7Qu9C10LUgMjUg0LrRg9GA0YHQvtCyIjtzOjQ6ImtleXMiO3M6MzA6ItC+0L3Qu9Cw0LnQvSwg0L7QsdGD0YfQtdC90LjQtSI7fX0=', 'coursesetting', '2.0', 'bm-course.xml'),
+(2, 'blog', 'BLOG', 'system', 1, 'a:1:{s:6:\"params\";a:22:{s:2:\"h1\";s:24:\"Блог о спорте\";s:7:\"license\";s:40:\"0cc9c564324b19a8a962a4e74516f5e4c87e81e1\";s:8:\"comments\";s:1:\"0\";s:11:\"commenthead\";s:0:\"\";s:11:\"commentcode\";s:0:\"\";s:9:\"postcount\";s:1:\"5\";s:10:\"show_cover\";s:1:\"1\";s:8:\"show_cat\";s:1:\"1\";s:16:\"show_create_date\";s:1:\"1\";s:4:\"hero\";s:50:\"https://demo.school-master.ru/images/blog-hero.jpg\";s:8:\"position\";s:10:\"center top\";s:9:\"heroheigh\";s:3:\"450\";s:15:\"heromobileheigh\";s:3:\"200\";s:12:\"overlaycolor\";s:7:\"#0c0c0c\";s:7:\"overlay\";s:3:\"0.4\";s:10:\"heroheader\";s:27:\"Блог марафонца\";s:5:\"color\";s:7:\"#f7f7f7\";s:8:\"fontsize\";s:2:\"50\";s:15:\"fontsize_mobile\";s:2:\"20\";s:5:\"title\";s:15:\"Мой блог\";s:4:\"desc\";s:0:\"\";s:4:\"keys\";s:0:\"\";}}', 'blogsetting', '2.0', 'bm-blog.xml'),
+(3, 'partnership', 'PARTNERSHIP', 'system', 1, '', 'affsetting', '2.0', 'bm-aff.xml'),
+(4, 'responder', 'RESPONDER', 'system', 1, 'a:1:{s:6:\"params\";a:4:{s:7:\"license\";s:40:\"acfe546f054fdbc8979dd4074fae05767a6f2a06\";s:4:\"name\";s:23:\"Дорогой друг\";s:9:\"send_pass\";s:1:\"0\";s:5:\"count\";s:2:\"10\";}}', 'respondersetting', '2.0', 'bm-responder.xml'),
+(5, 'membership', 'MEMBERSHIP', 'system', 1, 'a:1:{s:6:\"params\";a:2:{s:7:\"expires\";s:0:\"\";s:7:\"license\";s:40:\"6646e877e7330764f4ca514aa7001812f12df4cd\";}}', 'membersetting', '2.0', 'bm-member.xml'),
+(6, 'amocrm', 'Amocrm', 'system', 0, 'a:1:{s:6:\"params\";a:15:{s:10:\"secret_key\";s:0:\"\";s:9:\"integr_id\";s:0:\"\";s:12:\"pip_acc_stat\";s:0:\"\";s:11:\"pip_acc_pay\";s:0:\"\";s:16:\"pip_instlmnt_pay\";s:0:\"\";s:13:\"pip_gen_trial\";s:0:\"\";s:14:\"stage_acc_stat\";s:0:\"\";s:13:\"stage_acc_pay\";s:0:\"\";s:18:\"stage_instlmnt_pay\";s:0:\"\";s:15:\"stage_gen_trial\";s:0:\"\";s:12:\"send_partner\";b:0;s:11:\"pip_give_fp\";s:0:\"\";s:13:\"stage_give_fp\";s:0:\"\";s:12:\"partners_ids\";s:12:\"partners_ids\";s:16:\"partners_payouts\";s:16:\"partners_payouts\";}}', 'amocrmsetting', '2.2.3', NULL),
+(7, 'getfunnels', 'GetFunnels', 'system', 0, 'a:1:{s:6:\"params\";a:2:{s:12:\"account_name\";s:0:\"\";s:10:\"secret_key\";s:0:\"\";}}', 'getfunnelssetting', '2.2.4', NULL),
+(8, 'telegram', 'Telegram', 'system', 1, 'a:1:{s:6:"params";a:3:{s:5:"token";s:5:"12121";s:8:"bot_name";s:5:"32323";s:14:"is_set_webhook";s:0:"";}}', 'telegramsetting', '2.2.6', NULL),
+(9, 'callpassword', 'CallPassword', 'system', 0, '{\"params\":{\"api_key\":\"\",\"sign_key\":\"\",\"get_call_status\":\"1\",\"get_call_timeout\":30,\"access_users_to_lessons\":0,\"cp_user_groups\":0}}', 'callpasswordsetting', '2.2.6', NULL),
+(10, 'autopilot', 'Autopilot Integration', 'system', 0, '{\"vk_auth_params\":{\"client_id\":\"\",\"redirect_uri\":\"/autopilot/vkauth\",\"response_type\":\"code\",\"scope\":\"offline,email\",\"v\":\"5.103\"},\"modules\":{\"login\":0},\"vk_app\":{\"id\":\"\",\"secret\":\"\",\"service_key\":\"\",\"v\":\"5.103\"},\"vk_club\":{\"id\":\"\",\"key\":\"\",\"notify\":0}}', 'autopilotsetting', '1.51', NULL),
+(11, 'expertsender', 'Expertsender Integration', 'system', 0, 'a:1:{s:6:\"params\";a:1:{s:10:\"secret_key\";s:0:\"\";}}', 'expertsendersetting', '2.3.0', NULL),
+(12, 'training', 'Тренинги 2.0', 'system', 1, '{\"params\":{\"h1\":\"\\u0422\\u0440\\u0435\\u043d\\u0438\\u043d\\u0433\\u0438\",\"h2\":\"\",\"commenthead\":\"\",\"commentcode\":\"\",\"width_less_img\":\"160\",\"show_blocks\":\"1\",\"hero\":\"http:\\/\\/trial.smdemo.ru\\/images\\/hero1.jpg\",\"position\":\"center center\",\"heroheigh\":\"450\",\"heromobileheigh\":\"\",\"overlaycolor\":\"#000000\",\"overlay\":\"0.1\",\"heroheader\":\"\\u041d\\u0430\\u0448\\u0438 \\u0442\\u0440\\u0435\\u043d\\u0438\\u043d\\u0433\\u0438\",\"color\":\"#ffffff\",\"fontsize\":\"48\",\"fontsize_mobile\":\"20\",\"title\":\"\\u042d\\u0442\\u043e \\u043d\\u043e\\u0432\\u044b\\u0435 \\u0422\\u0440\\u0435\\u043d\\u0438\\u043d\\u0433\\u0438 \\u0432 SM\",\"meta_desc\":\"\",\"meta_keys\":\"\"}}', 'trainingsetting', '2.0', NULL),
+(13, 'facebookapi', 'Facebook API', 'system', 0, 'a:1:{s:6:\"params\";a:2:{s:8:\"pixel_id\";s:0:\"\";s:15:\"access_token_fb\";s:0:\"\";}}', 'facebooksetting', '1', NULL);
+
+INSERT INTO `#PREFIX#feedback_forms` (`form_id`, `name`, `form_desc`, `default_form`, `params`, `hits`, `status`) VALUES
+(1, 'Форма обратной связи', '', 1, 'YToxOntzOjY6InBhcmFtcyI7YToyNDp7czoyOiJoMSI7czoyNToi0JfQsNC00LDRgtGMINCy0L7Qv9GA0L7RgSI7czo4OiJyZWRpcmVjdCI7czowOiIiO3M6OToicmVjaXBpZW50IjtzOjI0OiJzdXBwb3J0QHNjaG9vbC1tYXN0ZXIucnUiO3M6NjoiYmVmb3JlIjtzOjA6IiI7czo1OiJhZnRlciI7czowOiIiO3M6NToidGl0bGUiO3M6NjM6ItCk0L7RgNC80LAg0L7QsdGA0LDRgtC90L7QuSDRgdCy0Y/Qt9C4INC00LvRjyDRgtC10YHRgtCwIHRpdGxlICI7czo5OiJtZXRhX2Rlc2MiO3M6MDoiIjtzOjk6Im1ldGFfa2V5cyI7czowOiIiO3M6NDoibmFtZSI7czoxOiIxIjtzOjU6InBob25lIjtzOjE6IjAiO3M6NToiZW1haWwiO3M6MToiMiI7czo3OiJtZXNzYWdlIjtzOjE6IjEiO3M6ODoicG9saXRpa2EiO3M6MToiMSI7czoxMToiYnV0dG9uX3RleHQiO3M6Mzc6ItCe0YLQv9GA0LDQstC40YLRjCDRgdC+0L7QsdGJ0LXQvdC40LUiO3M6ODoibWluX3RpbWUiO3M6MToiNSI7czo2OiJmaWVsZDEiO3M6Mjoibm8iO3M6MTE6ImZpZWxkMV9uYW1lIjtzOjA6IiI7czoxMToiZmllbGQxX2RhdGEiO3M6MDoiIjtzOjY6ImZpZWxkMiI7czoyOiJubyI7czoxMToiZmllbGQyX25hbWUiO3M6MDoiIjtzOjExOiJmaWVsZDJfZGF0YSI7czowOiIiO3M6NDoidGV4dCI7czoxMDE6IjxwPtCh0L/QsNGB0LjQsdC+ISDQkiDQsdC70LjQttCw0LnRiNC10LUg0LLRgNC10LzRjyDQvNGLINC+0YLQstC10YLQuNC8INC90LAg0LLQsNGIINCy0L7Qv9GA0L7RgS48L3A+IjtzOjExOiJsZXR0ZXJfc3ViaiI7czowOiIiO3M6NjoibGV0dGVyIjtzOjA6IiI7fX0=', 755, 1);
+
+INSERT INTO `#PREFIX#letters_settings` (`setting_id`, `client_letter`, `client_letter_subj`, `register_letter`, `reg_confirm_letter`, `pass_reset_letter`, `remind_letter1`, `remind_letter2`, `remind_letter3`, `remind_sms1`, `remind_sms2`, `org_data`) VALUES
+(1, '<p>Здравствуйте, [CLIENT_NAME]!</p>\r\n<p>Благодарим Вас за оплаченный заказ.</p>\r\n<p>Номер вашего заказа: [ORDER]<br />Название: [PRODUCT_NAME]<br />Сумма: [SUMM]</p>\r\n<p>Если у вас возникнут вопросы, то вы можете задать их в нашей службе поддержки [SUPPORT].</p>\r\n<p>&nbsp;</p>\r\n<p>---<br />С уважением</p>', 'Ваш заказ.', '<p>Здравствуйте, [CLIENT_NAME]!</p>\r\n<p>Для вас создан личный кабинет.</p>\r\n<p>Вход в личный кабинет: [LINK]<br />Логин: [EMAIL]<br />Пароль: [PASS]</p>\r\n<p>Если у вас возникнут вопросы, то вы можете задать их в нашей службе поддержки [SUPPORT].</p>\r\n<p>&nbsp;</p>\r\n<p>С уважением.</p>', '<p>Здравствуйте, [CLIENT_NAME]!</p>\r\n<p>Для подтверждения регистрации перейдите по ссылке: [LINK]</p>\r\n<p>Вход в личный кабинет: [LINK2]<br />Логин: [EMAIL]<br />Пароль: [PASS]</p>\r\n<p>Если у вас возникнут вопросы, то вы можете задать их в нашей службе поддержки [SUPPORT].</p>\r\n<p></p>\r\n<p>С уважением.</p>', '<p>Здравствуйте, [CLIENT_NAME]!</p>\r\n<p>Для вас был изменен пароль.</p>\r\n<p>Вход в личный кабинет: [LINK]<br />Логин: [EMAIL]<br />Пароль: [PASS]</p>\r\n<p>Если у вас возникнут вопросы, то вы можете задать их в нашей службе поддержки [SUPPORT].</p>\r\n<p></p>\r\n<p>С уважением.</p>', 'YTo0OntzOjY6InN0YXR1cyI7czoxOiIxIjtzOjQ6InRpbWUiO3M6MToiMSI7czo3OiJzdWJqZWN0IjtzOjYxOiLQktGLINCy0YvQv9C40YHQsNC70Lgg0YHRh9GR0YIg0L3QsCDQvtC/0LvQsNGC0YMg0YLQvtCy0LDRgNCwIjtzOjQ6InRleHQiO3M6NTU2OiI8cD7Ql9C00YDQsNCy0YHRgtCy0YPQudGC0LUsIFtOQU1FXSE8L3A+DQo8cD7QktGLINCy0YvQv9C40YHQsNC70Lgg0L3QvtCy0YvQuSDRgdGH0ZHRgjo8L3A+DQo8cD7QndC+0LzQtdGAINGB0YfRkdGC0LA6IFtPUkRFUl08L3A+DQo8cD7Qn9C+0YHRgtC+0Y/QvdC90LDRjyDRgdGB0YvQu9C60LAg0LTQu9GPINC+0L/Qu9Cw0YLRiyDQuCDQvtGC0YHQu9C10LbQuNCy0LDQvdC40Y8g0YHQvtGB0YLQvtGP0L3QuNGPINCy0LDRiNC10LPQviDQt9Cw0LrQsNC30LA6PGJyIC8+W0xJTktdPC9wPg0KPHA+Jm5ic3A7PC9wPg0KPHA+UC5TLiDQldGB0LvQuCDQktCw0Lwg0L/QuNGB0YzQvNC+INC/0YDQuNGI0LvQviDQv9C+INC+0YjQuNCx0LrQtSAtINC/0YDQvtGB0YLQviDQv9GA0L7QuNCz0L3QvtGA0LjRgNGD0LnRgtC1INC10LPQviwg0L/RgNC4INC90LXQvtCx0YXQvtC00LjQvNC+0YHRgtC4IC0g0YHQstGP0LbQuNGC0LXRgdGMINGBINCw0LTQvNC40L3QuNGB0YLRgNCw0YbQuNC10Lkg0YHQsNC50YLQsC48L3A+DQo8cD4tLS08YnIgLz7QoSDRg9Cy0LDQttC10L3QuNC10Lw8L3A+Ijt9', 'YTo0OntzOjY6InN0YXR1cyI7czoxOiIwIjtzOjQ6InRpbWUiO3M6MjoiNDUiO3M6Nzoic3ViamVjdCI7czo1ODoi0KMg0LLQsNGBINC40LzQtdC10YLRgdGPINC90LXQvtC/0LvQsNGH0LXQvdC90YvQuSDRgdGH0ZHRgiI7czo0OiJ0ZXh0IjtzOjEwMDY6IjxwPtCX0LTRgNCw0LLRgdGC0LLRg9C50YLQtS48L3A+DQo8cD7QndC10LTQsNCy0L3QviDQstGLINC+0YTQvtGA0LzQu9GP0LvQuCDQt9Cw0LrQsNC3IOKEliBbT1JERVJdPGJyIC8+0J3QsCDQtNCw0L3QvdGL0Lkg0LzQvtC80LXQvdGCINGB0YfQtdGCINC40LzQtdC10YIg0YHRgtCw0YLRg9GBICLQndC1INC+0L/Qu9Cw0YfQtdC9Ii48L3A+DQo8cD4mZ3Q7Jmd0OyDQodGB0YvQu9C60LAg0L3QsCDQvtC/0LvQsNGC0YMmbmJzcDtbTElOS108L3A+DQo8cD4mbmJzcDs8L3A+DQo8cD7QldGB0LvQuCDRgyDQstCw0YEg0LLQvtC30L3QuNC60LvQuCDQstC+0L/RgNC+0YHRiyDQuNC70Lgg0L3Rg9C20L3QsCDQvdCw0YjQsCDQv9C+0LzQvtGJ0YwsINGC0L4g0L3QsNC/0LjRiNC40YLQtSDQsiDQvtCx0YDQsNGC0L3QvtC8INC/0LjRgdGM0LzQtSDQuNC70Lgg0YfQtdGA0LXQtyDRh9Cw0YIg0L3QsCDRgdGC0YDQsNC90LjRhtC1INGB0YfQtdGC0LAuPC9wPg0KPHA+0JjQvdGE0L7RgNC80LDRhtC40Y86PC9wPg0KPHA+0KHRgdGL0LvQutCwINC00LvRjyDQvtGC0YHQu9C10LbQuNCy0LDQvdC40Y8g0YHQvtGB0YLQvtGP0L3QuNGPINCS0LDRiNC10LPQviDQt9Cw0LrQsNC30LA6PGJyIC8+W0xJTktdPC9wPg0KPHA+0J/QtdGA0LXQudC00Y8g0L/QviDRgdGB0YvQu9C60LUg0LLRiyDQvNC+0LbQtdGC0LUg0LLRi9Cx0YDQsNGC0Ywg0YPQtNC+0LHQvdGL0Lkg0LLQsNGA0LjQsNC90YIg0L7Qv9C70LDRgtGLINC4INC+0L/Qu9Cw0YLQuNGC0YwuPGJyIC8+0JTQvtGB0YLRg9C/INCx0YPQtNC10YIg0LLQsNC8INCy0YvRgdGC0LDQstC70LXQvSDQsNCy0YLQvtC80LDRgtC40YfQtdGB0LrQuCDQuCDQvNC+0LzQtdC90YLQsNC70YzQvdC+INGB0YDQsNC30YMg0L/QvtGB0LvQtSDQvtC/0LvQsNGC0YsuPC9wPg0KPHA+Jm5ic3A7PC9wPg0KPHA+0JLRgdC10LPQviDQktCw0Lwg0L3QsNC40LvRg9GH0YjQtdCz0L4hPGJyIC8+LS0tPGJyIC8+0KEg0YPQstCw0LbQtdC90LjQtdC8LjwvcD4iO30=', 'YTo0OntzOjY6InN0YXR1cyI7czoxOiIwIjtzOjQ6InRpbWUiO3M6NDoiMTAwMCI7czo3OiJzdWJqZWN0IjtzOjY2OiJbTkFNRV0sINGDINCy0LDRgSDQuNC80LXQtdGC0YHRjyDQvdC10L7Qv9C70LDRh9C10L3QvdGL0Lkg0YHRh9GR0YIiO3M6NDoidGV4dCI7czo5MzM6IjxwPtCX0LTRgNCw0LLRgdGC0LLRg9C50YLQtSwgW05BTUVdITwvcD4NCjxwPtCd0LXRgdC60L7Qu9GM0LrQviDQtNC90LXQuSDQvdCw0LfQsNC0INCy0Ysg0L7RhNC+0YDQvNC70Y/Qu9C4INC30LDQutCw0Lcg4oSWIFtPUkRFUl0uPGJyIC8+0J3QsCDQtNCw0L3QvdGL0Lkg0LzQvtC80LXQvdGCINGB0YfQtdGCINC40LzQtdC10YIg0YHRgtCw0YLRg9GBICLQndC1INC+0L/Qu9Cw0YfQtdC9Ii48L3A+DQo8cD7Qn9C+0LbQsNC70YPQudGB0YLQsCwg0L/RgNC+0YHQvNC+0YLRgNC40YLQtSDQuNC90YTQvtGA0LzQsNGG0LjRjiDQviDQstGL0L/QuNGB0LDQvdC90L7QvCDRgdGH0ZHRgtC1INC4INC/0YDQuCDQvdC10L7QsdGF0L7QtNC40LzQvtGB0YLQuCAtINC/0YDQvtC40LfQstC10LTQuNGC0LUg0L7Qv9C70LDRgtGDLjwvcD4NCjxwPtCh0YHRi9C70LrQsCDQtNC70Y8g0L7RgtGB0LvQtdC20LjQstCw0L3QuNGPINGB0L7RgdGC0L7Rj9C90LjRjyDQktCw0YjQtdCz0L4g0LfQsNC60LDQt9CwOjxiciAvPltMSU5LXTwvcD4NCjxwPjxiciAvPtCf0LXRgNC10LnQtNGPINC/0L4g0YHRgdGL0LvQutC1INCy0Ysg0LzQvtC20LXRgtC1INCy0YvQsdGA0LDRgtGMINGD0LTQvtCx0L3Ri9C5INCy0LDRgNC40LDQvdGCINC+0L/Qu9Cw0YLRiyDQuCDQvtC/0LvQsNGC0LjRgtGMLjxiciAvPtCU0L7RgdGC0YPQvyDQuiDQutGD0YDRgdGDINCx0YPQtNC10YIg0LLQsNC8INCy0YvRgdGC0LDQstC70LXQvSDQsNCy0YLQvtC80LDRgtC40YfQtdGB0LrQuCDQuCDQvNC+0LzQtdC90YLQsNC70YzQvdC+INGB0YDQsNC30YMg0L/QvtGB0LvQtSDQvtC/0LvQsNGC0YsuPC9wPg0KPHA+0JLRgdC10LPQviDQktCw0Lwg0L3QsNC40LvRg9GH0YjQtdCz0L4uPC9wPg0KPHA+PGJyIC8+LS0tPGJyIC8+0KEg0YPQstCw0LbQtdC90LjQtdC8PC9wPg0KPHA+Jm5ic3A7PC9wPiI7fQ==', NULL, NULL, NULL);
+
+INSERT INTO `#PREFIX#payments` (`payment_id`, `name`, `title`, `public_title`, `payment_desc`, `status`, `sort`, `params`) VALUES
+(1, 'custom', 'Ручной способ', '', '<p>Перевод напрямую с карты на карту.</p>', 0, 2, 'YTozOntzOjc6ImdhdGV3YXkiO3M6NDM6ItCv0L3QtNC10LrRgS7QlNC10L3RjNCz0LgsIFFJV0ksIFdlYm1vbmV5DQoiO3M6ODoiaW5zdHJ1Y3QiO3M6MTI1NzoiPHA+0JjQvdGB0YLRgNGD0LrRhtC40Y8g0L/QviDQvtC/0LvQsNGC0LUg0YDRg9GH0L3Ri9C8INGB0L/QvtGB0L7QsdC+0LwuPC9wPg0KPHA+0K3RgtC+INC/0YDRj9C80L7QuSDQv9C10YDQtdCy0L7QtCDQsdC10Lcg0L/QvtGB0YDQtdC00L3QuNC60L7QsiDRgSDQstCw0YjQtdC5INC60LDRgNGC0Ysv0LrQvtGI0LXQu9GM0LrQsCDQvdCwINC90LDRiNGDINC60LDRgNGC0YMv0LrQvtGI0LXQu9GR0LouPC9wPg0KPHA+PHN0cm9uZz7QqNCw0LMgMS48L3N0cm9uZz4g0JLRiyDQv9C10YDQtdGH0LjRgdC70Y/QtdGC0LUg0L7Qv9C70LDRgtGDINC90LAg0L7QtNC40L0g0LjQtyDRgNC10LrQstC40LfQuNGC0L7QsiDRg9C60LfQsNC90L3Ri9GFINC90LjQttC1OjwvcD4NCjxwPjxzdHJvbmc+0KHQv9C40YHQvtC6INGA0LXQutCy0LjQt9C40YLQvtCyOiZuYnNwOzwvc3Ryb25nPjwvcD4NCjx1bD4NCjxsaT7Qry7QlNC10L3RjNCz0Lg8L2xpPg0KPGxpPtCa0LDRgNGC0LAg0KHQsdC10YDQsdCw0L3QutCwPC9saT4NCjxsaT5XZWJtb25leTwvbGk+DQo8bGk+UUlXSTwvbGk+DQo8L3VsPg0KPHA+PHN0cm9uZz7QqNCw0LMgMi48L3N0cm9uZz4g0J/QvtGB0LvQtSDQvtC/0LvQsNGC0Ysg0LLQvtC30LLRgNCw0YnQsNC10YLQtdGB0Ywg0L3QsCDRjdGC0YMg0YHRgtGA0LDQvdC40YbRgyDQuCDQvdC40LbQtSDQstGL0LHQuNGA0LDQtdGC0LUg0YHQuNGB0YLQtdC80YMg0YfQtdGA0LXQtyDQutC+0YLQvtGA0YPRjiDQvtC/0LvQsNGH0LjQstCw0LvQuC48YnIgLz7QlNC70Y8g0L7Qv9C10YDQsNGC0LjQstC90L7RgdGC0Lgg0LzQvtC20LXRgtC1INGD0LrQsNC30LDRgtGMIDQg0L/QvtGB0LvQtdC00L3QuNGFINGG0LjRhNGA0Ysg0LLQsNGI0LXQuSDQutCw0YDRgtGLINC40LvQuCDQutC+0YjQtdC70YzQutCwLCDRgSDQutC+0YLQvtGA0L7Qs9C+INCy0Ysg0L7Qv9C70LDRh9C40LLQsNC70LguPC9wPg0KPHA+0Jgg0L3QsNC20LjQvNCw0LXRgtC1INC60L3QvtC/0LrRgyAiPHN0cm9uZz7QntC/0LvQsNGH0LXQvdC+PC9zdHJvbmc+Ii48L3A+DQo8cD48c3Ryb25nPtCo0LDQsyAzLjwvc3Ryb25nPiDQkiDRgtC10YfQtdC90LjQuCDRh9Cw0YHQsCAo0L7QsdGL0YfQvdC+INC80LXQvdGM0YjQtSkg0LzRiyDQv9GA0L7QstC10YDQuNC8INGE0LDQutGCINC/0L7RgdGC0YPQv9C70LXQvdC40Y8g0L7Qv9C70LDRgtGLINC4INC+0YLQv9GA0LDQstC40Lwg0LfQsNC60LDQtyDQvdCwINCy0LDRiCBlLW1haWwg0LDQtNGA0LXRgS48L3A+IjtzOjY6InRoYW5rcyI7czo3MTM6IjxwPtCV0YHQu9C4INCy0Ysg0YPQttC1INGB0LTQtdC70LDQu9C4INC+0L/Qu9Cw0YLRgywg0YLQviDQstGB0ZEg0L7Qui4gPGJyIC8+0JrQsNC6INGC0L7Qu9GM0LrQviDQvNGLINC/0YDQvtCy0LXRgNC40Lwg0YTQsNC60YIg0L/QvtGB0YLRg9C/0LvQtdC90LjRjywg0YLQviDRgdGA0LDQt9GDINC+0YLQv9GA0LDQstC40Lwg0LLQsNC8INC30LDQutCw0Lcg0L3QsCDRg9C60LDQt9Cw0L3QvdGL0LkgZS1tYWlsLjwvcD4NCjxwPtCd0LUg0LfQsNCx0YPQtNGM0YLQtSDQv9GA0L7QstC10YDQuNGC0Ywg0L/QsNC/0LrRgyDRgdC/0LDQvC48L3A+DQo8cD7QldGB0LvQuCDQstGLINC10YnRkSDQvdC1INC+0L/Qu9Cw0YLQuNC70LgsINGC0L4g0LLQvtGCINGB0L/QuNGB0L7QuiDQvdCw0YjQuNGFINGA0LXQutCy0LjQt9C40YLQvtCyOjwvcD4NCjxwPi0gV2VibW9uZXkgUjQzNDM0MzQzNDxiciAvPtCf0LXRgNC10LnRgtC4INC90LAgPGEgaHJlZj0iaHR0cHM6Ly93ZWJtb25leS5ydSIgdGFyZ2V0PSJfYmxhbmsiIHJlbD0ibm9vcGVuZXIiPldlYm1vbmV5ICZndDsmZ3Q7PC9hPjwvcD4NCjxwPi0g0K8u0JTQtdC90YzQs9C4IDQxMDA0MzQzNDM0PGJyIC8+0J/QtdGA0LXQudGC0Lgg0L3QsCA8YSBocmVmPSJodHRwczovL21vbmV5LnlhbmRleC5ydSIgdGFyZ2V0PSJfYmxhbmsiIHJlbD0ibm9vcGVuZXIiPtCvLtCU0LXQvdGM0LPQuCAmZ3Q7Jmd0OzwvYT48L3A+Ijt9'),
+(2, 'company', 'Оплата для юр.лиц', '', '<h4>Выставить счет</h4>\r\n<p>Оплата для юридических лиц через расчётный счёт.</p>', 1, 10, 'YToxNzp7czo4OiJ0eXBlX29yZyI7czoxOiIxIjtzOjg6Im9yZ19uYW1lIjtzOjA6IiI7czozOiJpbm4iO3M6MDoiIjtzOjM6ImtwcCI7czowOiIiO3M6NzoiYWRkcmVzcyI7czowOiIiO3M6OToiYmFua19uYW1lIjtzOjA6IiI7czozOiJiaWsiO3M6MDoiIjtzOjEwOiJiYW5rX3NjaGV0IjtzOjA6IiI7czo3OiJ5b3VyX3JzIjtzOjA6IiI7czozOiJuZHMiO3M6MToiMCI7czo4OiJwYXlfdGltZSI7czoxOiI3IjtzOjk6InNpZ25fYm9zcyI7czowOiIiO3M6ODoic2lnbl9idWgiO3M6MDoiIjtzOjU6InByaW50IjtzOjA6IiI7czo4OiJzaWduX2NzcyI7czowOiIiO3M6ODoiaW5zdHJ1Y3QiO3M6MDoiIjtzOjY6InRoYW5rcyI7czowOiIiO30='),
+(3, 'robokassa', 'Робокасса', NULL, '<p>Оплата через сервис Робокасса. Принимаются банковский карты, Яндекс.Деньги, Webmoney, QIWI.</p>', 1, 0, 'YTozOntzOjU6ImxvZ2luIjtzOjA6IiI7czo1OiJwYXNzMSI7czowOiIiO3M6NToicGFzczIiO3M6MDoiIjt9'),
+(4, 'yakassa', 'Яндекс.Касса', NULL, '<p>Оплата через сервис Яндекс.Касса. Принимаются банковский карты, Яндекс.Деньги, Webmoney, QIWI.</p>', 0, 0, 'YTozOntzOjEwOiJ5YV9zaG9wX2lkIjtzOjA6IiI7czo3OiJ5YV9zY2lkIjtzOjA6IiI7czo0OiJwYXNzIjtzOjA6IiI7fQ=='),
+(5, 'yakassapi', 'Юкасса API', '', '<p>Оплата через сервис Яндекс.Касса. Принимаются банковские карты, Яндекс.Деньги, Webmoney, QIWI.</p>', 1, 0, 'YTo5OntzOjEwOiJ5YV9zaG9wX2lkIjtzOjY6IjAwMDAwMCI7czo3OiJhcGlfa2V5IjtzOjEyOiIwMDAwMDAwMDAwMDAiO3M6ODoiY3VycmVuY3kiO3M6MzoiUlVCIjtzOjEyOiJvbmxpbmVfa2Fzc2EiO3M6MToiMSI7czo5OiJmdWxsX25hbWUiO3M6MTc6ItCY0LLQsNC90L7QsiDQmNCYIjtzOjM6ImlubiI7czoxMDoiNzMyODEwMDAwMCI7czo4OiJ2YXRfY29kZSI7czoxOiIxIjtzOjEyOiJzZWxfcGF5X210ZHMiO3M6OToidGhpc19zaXRlIjtzOjExOiJwYXlfbWV0aG9kcyI7YToyOntpOjA7czo5OiJ5b29fbW9uZXkiO2k6MTtzOjk6ImJhbmtfY2FyZCI7fX0='),
+(6, 'paypal', 'Paypal', '', '<p>Оплата через Paypal.</p>', 0, 0, 'YToyOntzOjg6ImJ1c2luZXNzIjtzOjA6IiI7czo4OiJjdXJyZW5jeSI7czowOiIiO30='),
+(7, 'fondy', 'Fondy', NULL, '<p>Оплата через сервсис Fondy.</p>', 0, 0, 'YTozOntzOjExOiJtZXJjaGFudF9pZCI7czowOiIiO3M6MTA6InNlY3JldF9rZXkiO3M6MDoiIjtzOjg6ImN1cnJlbmN5IjtzOjM6IlJVQiI7fQ=='),
+(8, 'liqpay', 'Liqpay', NULL, '<p>Оплата через сервсис Liqpay.</p>', 0, 0, 'YTozOntzOjEwOiJwdWJsaWNfa2V5IjtzOjA6IiI7czoxMToicHJpdmF0ZV9rZXkiO3M6MDoiIjtzOjg6ImN1cnJlbmN5IjtzOjM6IlJVQiI7fQ=='),
+(9, 'modulbank', 'МодульБанк', NULL, '<p>Оплата через сервсис МодульБанк.</p>', 0, 0, 'YTo4OntzOjExOiJtZXJjaGFudF9pZCI7czowOiIiO3M6MTA6InNlY3JldF9rZXkiO3M6MDoiIjtzOjg6ImN1cnJlbmN5IjtzOjM6IlJVUiI7czoxMjoicGF5bWVudF9tb2RlIjtzOjc6ImRlZmF1bHQiO3M6ODoidGF4X3R5cGUiO3M6NDoibm9uZSI7czozOiJTTk8iO3M6MDoiIjtzOjE0OiJwYXltZW50X29iamVjdCI7czowOiIiO3M6OToidGVzdF9tb2RlIjtzOjA6IiI7fQ=='),
+(10, 'tinkoff', 'Тинькофф', NULL, '<p>Оплата через сервис Тинькофф.</p>', 0, 0, 'YToyOntzOjEyOiJ0ZXJtaW5hbF9rZXkiO3M6MDoiIjtzOjEwOiJzZWNyZXRfa2V5IjtzOjA6IiI7fQ=='),
+(11, 'walletone', 'Единая касса', NULL, '<p>Оплата через сервсис Единая касса.</p>', 0, 0, 'YTo3OntzOjExOiJtZXJjaGFudF9pZCI7czowOiIiO3M6MTA6InNlY3JldF9rZXkiO3M6MDoiIjtzOjEyOiJhY2NvdW50X3RpbWUiO2k6NztzOjExOiJjdXJyZW5jeV9pZCI7aTo2NDM7czo4OiJ0YXhfdHlwZSI7czo3OiJ3aXRob3V0IjtzOjEwOiJwdF9lbmFibGVkIjthOjA6e31zOjExOiJwdF9kaXNhYmxlZCI7YTowOnt9fQ'),
+(12, 'webmoney', 'Webmoney', NULL, '<p>Оплата через сервсис Webmoney.</p>', 0, 0, 'YTo0OntzOjEyOiJwdXJzZV9udW1iZXIiO3M6MDoiIjtzOjEwOiJzZWNyZXRfa2V5IjtzOjA6IiI7czo5OiJ0ZXN0X21vZGUiO2k6MDtzOjg6InNpbV9tb2RlIjtpOjA7fQ=='),
+(13, 'yamoney', 'Яндекс.Деньги', NULL, '<p>Оплата через сервис Яндекс.Деньги.</p>', 0, 0, 'YToyOntzOjEyOiJwdXJzZV9udW1iZXIiO3M6MDoiIjtzOjExOiJzZWNyZXRfY29kZSI7czowOiIiO30='),
+(14, 'wayforpay', 'Wayforpay', NULL, '<p>Оплата через сервсис Wayforpay.</p>', 0, 0, 'YTozOntzOjg6Im1lcmNoYW50IjtzOjA6IiI7czo5OiJzZWNyZXRrZXkiO3M6MDoiIjtzOjg6ImN1cnJlbmN5IjtzOjA6IiI7fQ=='),
+(15, 'prodamus', 'Prodamus', NULL, '<p>Оплата через сервис Prodamus. Принимаются банковский карты, Яндекс.Деньги, Webmoney, QIWI.</p>', 0, 0, ''),
+(16, 'hutkigrosh', 'Хутки грош', NULL, '<p>Оплата через сервсис Хутки грош.</p>', 0, 0, 'YTo4OntzOjc6ImVyaXBfaWQiO3M6MDoiIjtzOjU6ImxvZ2luIjtzOjA6IiI7czo0OiJwYXNzIjtzOjA6IiI7czo5OiJhbGZhY2xpY2siO3M6MToiMCI7czo2OiJ3ZWJwYXkiO3M6MToiMCI7czo3OiJzYW5kYm94IjtzOjE6IjAiO3M6MTI6ImFjY291bnRfdGltZSI7czoxOiI3IjtzOjg6ImN1cnJlbmN5IjtzOjM6IlJVQiI7fQ=='),
+(17, 'cloudpayments', 'CloudPayments', NULL, '<p>Оплата через Клаудпейментс.</p>', 0, 0, ''),
+(18, 'poscredit', 'POS-CREDIT', NULL, '<p>Оплата через сервсис POS-CREDIT.</p>', 0, 0, 'YTo0OntzOjk6ImFjY2Vzc19pZCI7czowOiIiO3M6NzoidXNlcl9pZCI7czowOiIiO3M6MTA6InVzZXJfdG9rZW4iO3M6MDoiIjtzOjIwOiJsZXR0ZXIyc3RhdHVzX2NoYW5nZSI7czo2MDA6IjxwPtCi0LXQvNCwOiDQmNC30LzQtdC90LXQvdC40LUg0YHRgtCw0YLRg9GB0LAg0LfQsNGP0LLQutC4INC90LAg0YDQsNGB0YHRgNC+0YfQutGDPC9wPg0KPHA+0JfQtNGA0LDQstGB0YLQstGD0LnRgtC1LCBbQ0xJRU5UX05BTUVdITwvcD4NCjxwPtCS0Ysg0L7RgdGC0LDQstC70Y/Qu9C4INC30LDRj9Cy0LrRgyDQvdCwINGA0LDRgdGB0YDQvtGH0LrRgy4g0KHRgtCw0YLRg9GBINC30LDRj9Cy0LrQuCDQuNC30LzQtdC90LjQu9GB0Y8uPC9wPg0KPHA+0JfQsNC60LDQtzogW09SREVSX0lEXTxiciAvPmVtYWlsOiBbQ0xJRU5UX0VNQUlMXTxiciAvPtGB0YPQvNC80LAg0LfQsNC60LDQt9CwOiBbT1JERVJfU1VNXSBbQ1VSUkVOQ1ldPC9wPg0KPHA+0KHRgtCw0YLRg9GBOiA8c3BhbiBzdHlsZT0idGV4dC1kZWNvcmF0aW9uOiBsaW5lLXRocm91Z2g7Ij5bT0xEX1NUQVRVU108L3NwYW4+ICZyYXJyOyBbTkVXX1NUQVRVU108L3A+DQo8cD7QmNC90YTQvtGA0LzQsNGG0LjRjiDQv9C+INGB0YLQsNGC0YPRgdGDINC30LDRj9Cy0LrQuCDQvNC+0LbQvdC+INGD0LfQvdCw0YLRjCDQv9C+IDxhIGhyZWY9IltMSU5LX0lORk9dIj7RgdGB0YvQu9C60LU8L2E+PC9wPiI7fQ==');
+
+INSERT INTO `#PREFIX#product_types` (`type_id`, `type_name`, `type_title`) VALUES
+(1, 'digital', 'Цифровой товар'),
+(2, 'box', 'Физический товар'),
+(3, 'subscription', 'Подписка');
+
+INSERT INTO `#PREFIX#sales_page` (`id`, `param`, `page_text`, `page_code`) VALUES
+(1, 'YTo1OntzOjI6ImgxIjtzOjQ3OiLQodC60LjQtNC60Lgg0LIg0YfQtdGB0YLRjCAyMyDRhNC10LLRgNCw0LvRjyEhISI7czoxMToiZW5hYmxlX3BhZ2UiO3M6MToiMSI7czo1OiJ0aXRsZSI7czoyODoi0KHQutC40LTQutC4INGB0LrQuNC00LrQuCEhISI7czo5OiJtZXRhX2Rlc2MiO3M6MDoiIjtzOjY6InBhcmFtcyI7YTo5OntzOjQ6Imhlcm8iO3M6MDoiIjtzOjg6InBvc2l0aW9uIjtzOjEzOiJjZW50ZXIgY2VudGVyIjtzOjk6Imhlcm9oZWlnaCI7czowOiIiO3M6MTU6Imhlcm9tb2JpbGVoZWlnaCI7czowOiIiO3M6MTI6Im92ZXJsYXljb2xvciI7czo3OiIjMDAwMDAwIjtzOjc6Im92ZXJsYXkiO3M6MzoiMS4wIjtzOjU6ImNvbG9yIjtzOjc6IiMwMDAwMDAiO3M6ODoiZm9udHNpemUiO3M6MjoiMjAiO3M6MTU6ImZvbnRzaXplX21vYmlsZSI7czoyOiIyMCI7fX0=', '<p>&nbsp;</p>\r\n<p><img src=\"http://bm.joomlatown.net/images/23-Defenders_Day-23.jpg\" alt=\"\" /></p>', '');
+
+INSERT INTO `#PREFIX#settings` (`setting_id`, `script_url`, `license_key`, `secret_key`, `debug_mode`, `lang`, `site_name`, `currency`, `cookie`, `cover`, `show_items`, `security_key`, `enable_catalog`, `enable_reviews`, `enable_landing`, `enable_sale`, `enable_cabinet`, `enable_feedback`, `write_feedback`, `dwl_in_lk`, `client_letter`, `client_letter_subj`, `register_letter`, `template`, `template_set`, `in_head`, `in_body`, `counters`, `counters_head`, `phone`, `phone_link`, `admin_email`, `support_email`, `use_cart`, `request_phone`, `order_life_time`, `dwl_time`, `dwl_count`, `strict_report`, `simple_free_dwl`, `socbut`, `use_smtp`, `smtp_host`, `smtp_port`, `smtp_user`, `smtp_pass`, `smtp_private_key`, `smtp_domain`, `smtp_selector`, `smtp_ssl`, `sender_email`, `sender_name`, `return_path`, `remind_letter1`, `remind_letter2`, `remind_letter3`, `remind_sms1`, `remind_sms2`, `yacounter`, `ga_target`, `catalog_title`, `catalog_desc`, `catalog_keys`, `catalog_h1`, `reviews_tune`, `max_upload`, `show_order_note`, `split_test_enable`, `logotype`, `fix_head`, `login_redirect`, `show_telegram_nick`, `show_instagram_nick`, `show_surname`, `smsc`, `org_data`, `countries_list`, `session_time`, `email_protection`, `enable_registration`, `private_key`, `params`) VALUES
+(1, '', '', '', 0, 'ru', 'Марафонец', 'р.', 'billingmaster', 'logo-maraphonec-copy.png', 30, '', 1, 1, 1, 1, 1, 1, 1, 1, '<p>Здравствуйте, [CLIENT_NAME]!</p>\r\n<p>Благодарим Вас за оплаченный заказ.</p>\r\n<p>Номер вашего заказа: [ORDER]<br />Название: [PRODUCT_NAME]<br />Сумма: [SUMM]</p>\r\n<p>Если у вас возникнут вопросы, то вы можете задать их в нашей службе поддержки [SUPPORT].</p>\r\n<p>&nbsp;</p>\r\n<p>---<br />С уважением</p>', 'Ваш заказ.', '<p>Здравствуйте, [CLIENT_NAME]!</p>\r\n<p>Для вас создан личный кабинет.</p>\r\n<p>Вход в личный кабинет: [LINK]<br />Логин: [EMAIL]<br />Пароль: [PASS]</p>\r\n<p>Если у вас возникнут вопросы, то вы можете задать их в нашей службе поддержки [SUPPORT].</p>\r\n<p>&nbsp;</p>\r\n<p>С уважением.</p>', 'simple', 1, '', '', '', '', '+7 9999999999', '+7 9999999999', 'yandex@yandex.ru', 'yandex@yandex.ru', 0, 0, 4, 72, 30, 0, 0, 'YTo2OntzOjk6Imluc3RhZ3JhbSI7czozNjoiaHR0cHM6Ly9pbnN0YWdyYW0uY29tL29fc2Nob29sbWFzdGVyIjtzOjI6InRnIjtzOjMxOiJodHRwczovL3QubWUvb25saW5lc2Nob29sbWFzdGVyIjtzOjc6InlvdXR1YmUiO3M6NTY6Imh0dHBzOi8vd3d3LnlvdXR1YmUuY29tL2NoYW5uZWwvVUN5NWRGMjFpakdCNDFCNUMyZkI0Vjd3IjtzOjI6InZrIjtzOjI2OiJodHRwczovL3ZrLmNvbS9zY2hvb2xtYXN0ciI7czoyOiJmYiI7czozMjoiaHR0cHM6Ly9mYi5tZS9vbmxpbmVzY2hvb2xtYXN0ZXIiO3M6Mjoib2siO3M6MDoiIjt9', 0, 'smtp.yandex.ru', 587, 'login@yandex.ru', '12233434', '', '', '', 2, 'login@yandex.ru', 'Trial School Master', 'login@yandex.ru', 'YTo0OntzOjY6InN0YXR1cyI7czoxOiIxIjtzOjQ6InRpbWUiO3M6MToiMSI7czo3OiJzdWJqZWN0IjtzOjYxOiLQktGLINCy0YvQv9C40YHQsNC70Lgg0YHRh9GR0YIg0L3QsCDQvtC/0LvQsNGC0YMg0YLQvtCy0LDRgNCwIjtzOjQ6InRleHQiO3M6NTU2OiI8cD7Ql9C00YDQsNCy0YHRgtCy0YPQudGC0LUsIFtOQU1FXSE8L3A+DQo8cD7QktGLINCy0YvQv9C40YHQsNC70Lgg0L3QvtCy0YvQuSDRgdGH0ZHRgjo8L3A+DQo8cD7QndC+0LzQtdGAINGB0YfRkdGC0LA6IFtPUkRFUl08L3A+DQo8cD7Qn9C+0YHRgtC+0Y/QvdC90LDRjyDRgdGB0YvQu9C60LAg0LTQu9GPINC+0L/Qu9Cw0YLRiyDQuCDQvtGC0YHQu9C10LbQuNCy0LDQvdC40Y8g0YHQvtGB0YLQvtGP0L3QuNGPINCy0LDRiNC10LPQviDQt9Cw0LrQsNC30LA6PGJyIC8+W0xJTktdPC9wPg0KPHA+Jm5ic3A7PC9wPg0KPHA+UC5TLiDQldGB0LvQuCDQktCw0Lwg0L/QuNGB0YzQvNC+INC/0YDQuNGI0LvQviDQv9C+INC+0YjQuNCx0LrQtSAtINC/0YDQvtGB0YLQviDQv9GA0L7QuNCz0L3QvtGA0LjRgNGD0LnRgtC1INC10LPQviwg0L/RgNC4INC90LXQvtCx0YXQvtC00LjQvNC+0YHRgtC4IC0g0YHQstGP0LbQuNGC0LXRgdGMINGBINCw0LTQvNC40L3QuNGB0YLRgNCw0YbQuNC10Lkg0YHQsNC50YLQsC48L3A+DQo8cD4tLS08YnIgLz7QoSDRg9Cy0LDQttC10L3QuNC10Lw8L3A+Ijt9', 'YTo0OntzOjY6InN0YXR1cyI7czoxOiIwIjtzOjQ6InRpbWUiO3M6MjoiNDUiO3M6Nzoic3ViamVjdCI7czo1ODoi0KMg0LLQsNGBINC40LzQtdC10YLRgdGPINC90LXQvtC/0LvQsNGH0LXQvdC90YvQuSDRgdGH0ZHRgiI7czo0OiJ0ZXh0IjtzOjEwMDY6IjxwPtCX0LTRgNCw0LLRgdGC0LLRg9C50YLQtS48L3A+DQo8cD7QndC10LTQsNCy0L3QviDQstGLINC+0YTQvtGA0LzQu9GP0LvQuCDQt9Cw0LrQsNC3IOKEliBbT1JERVJdPGJyIC8+0J3QsCDQtNCw0L3QvdGL0Lkg0LzQvtC80LXQvdGCINGB0YfQtdGCINC40LzQtdC10YIg0YHRgtCw0YLRg9GBICLQndC1INC+0L/Qu9Cw0YfQtdC9Ii48L3A+DQo8cD4mZ3Q7Jmd0OyDQodGB0YvQu9C60LAg0L3QsCDQvtC/0LvQsNGC0YMmbmJzcDtbTElOS108L3A+DQo8cD4mbmJzcDs8L3A+DQo8cD7QldGB0LvQuCDRgyDQstCw0YEg0LLQvtC30L3QuNC60LvQuCDQstC+0L/RgNC+0YHRiyDQuNC70Lgg0L3Rg9C20L3QsCDQvdCw0YjQsCDQv9C+0LzQvtGJ0YwsINGC0L4g0L3QsNC/0LjRiNC40YLQtSDQsiDQvtCx0YDQsNGC0L3QvtC8INC/0LjRgdGM0LzQtSDQuNC70Lgg0YfQtdGA0LXQtyDRh9Cw0YIg0L3QsCDRgdGC0YDQsNC90LjRhtC1INGB0YfQtdGC0LAuPC9wPg0KPHA+0JjQvdGE0L7RgNC80LDRhtC40Y86PC9wPg0KPHA+0KHRgdGL0LvQutCwINC00LvRjyDQvtGC0YHQu9C10LbQuNCy0LDQvdC40Y8g0YHQvtGB0YLQvtGP0L3QuNGPINCS0LDRiNC10LPQviDQt9Cw0LrQsNC30LA6PGJyIC8+W0xJTktdPC9wPg0KPHA+0J/QtdGA0LXQudC00Y8g0L/QviDRgdGB0YvQu9C60LUg0LLRiyDQvNC+0LbQtdGC0LUg0LLRi9Cx0YDQsNGC0Ywg0YPQtNC+0LHQvdGL0Lkg0LLQsNGA0LjQsNC90YIg0L7Qv9C70LDRgtGLINC4INC+0L/Qu9Cw0YLQuNGC0YwuPGJyIC8+0JTQvtGB0YLRg9C/INCx0YPQtNC10YIg0LLQsNC8INCy0YvRgdGC0LDQstC70LXQvSDQsNCy0YLQvtC80LDRgtC40YfQtdGB0LrQuCDQuCDQvNC+0LzQtdC90YLQsNC70YzQvdC+INGB0YDQsNC30YMg0L/QvtGB0LvQtSDQvtC/0LvQsNGC0YsuPC9wPg0KPHA+Jm5ic3A7PC9wPg0KPHA+0JLRgdC10LPQviDQktCw0Lwg0L3QsNC40LvRg9GH0YjQtdCz0L4hPGJyIC8+LS0tPGJyIC8+0KEg0YPQstCw0LbQtdC90LjQtdC8LjwvcD4iO30=', 'YTo0OntzOjY6InN0YXR1cyI7czoxOiIwIjtzOjQ6InRpbWUiO3M6NDoiMTAwMCI7czo3OiJzdWJqZWN0IjtzOjY2OiJbTkFNRV0sINGDINCy0LDRgSDQuNC80LXQtdGC0YHRjyDQvdC10L7Qv9C70LDRh9C10L3QvdGL0Lkg0YHRh9GR0YIiO3M6NDoidGV4dCI7czo5MzM6IjxwPtCX0LTRgNCw0LLRgdGC0LLRg9C50YLQtSwgW05BTUVdITwvcD4NCjxwPtCd0LXRgdC60L7Qu9GM0LrQviDQtNC90LXQuSDQvdCw0LfQsNC0INCy0Ysg0L7RhNC+0YDQvNC70Y/Qu9C4INC30LDQutCw0Lcg4oSWIFtPUkRFUl0uPGJyIC8+0J3QsCDQtNCw0L3QvdGL0Lkg0LzQvtC80LXQvdGCINGB0YfQtdGCINC40LzQtdC10YIg0YHRgtCw0YLRg9GBICLQndC1INC+0L/Qu9Cw0YfQtdC9Ii48L3A+DQo8cD7Qn9C+0LbQsNC70YPQudGB0YLQsCwg0L/RgNC+0YHQvNC+0YLRgNC40YLQtSDQuNC90YTQvtGA0LzQsNGG0LjRjiDQviDQstGL0L/QuNGB0LDQvdC90L7QvCDRgdGH0ZHRgtC1INC4INC/0YDQuCDQvdC10L7QsdGF0L7QtNC40LzQvtGB0YLQuCAtINC/0YDQvtC40LfQstC10LTQuNGC0LUg0L7Qv9C70LDRgtGDLjwvcD4NCjxwPtCh0YHRi9C70LrQsCDQtNC70Y8g0L7RgtGB0LvQtdC20LjQstCw0L3QuNGPINGB0L7RgdGC0L7Rj9C90LjRjyDQktCw0YjQtdCz0L4g0LfQsNC60LDQt9CwOjxiciAvPltMSU5LXTwvcD4NCjxwPjxiciAvPtCf0LXRgNC10LnQtNGPINC/0L4g0YHRgdGL0LvQutC1INCy0Ysg0LzQvtC20LXRgtC1INCy0YvQsdGA0LDRgtGMINGD0LTQvtCx0L3Ri9C5INCy0LDRgNC40LDQvdGCINC+0L/Qu9Cw0YLRiyDQuCDQvtC/0LvQsNGC0LjRgtGMLjxiciAvPtCU0L7RgdGC0YPQvyDQuiDQutGD0YDRgdGDINCx0YPQtNC10YIg0LLQsNC8INCy0YvRgdGC0LDQstC70LXQvSDQsNCy0YLQvtC80LDRgtC40YfQtdGB0LrQuCDQuCDQvNC+0LzQtdC90YLQsNC70YzQvdC+INGB0YDQsNC30YMg0L/QvtGB0LvQtSDQvtC/0LvQsNGC0YsuPC9wPg0KPHA+0JLRgdC10LPQviDQktCw0Lwg0L3QsNC40LvRg9GH0YjQtdCz0L4uPC9wPg0KPHA+PGJyIC8+LS0tPGJyIC8+0KEg0YPQstCw0LbQtdC90LjQtdC8PC9wPg0KPHA+Jm5ic3A7PC9wPiI7fQ==', NULL, NULL, '', 0, 'Каталог товаров', '', '', 'Каталог товаров', 'YToxMjp7czo1OiJ0aXRsZSI7czoxMjoi0J7RgtC30YvQstGLIjtzOjI6ImgxIjtzOjEyOiLQntGC0LfRi9Cy0YsiO3M6OToibWV0YV9kZXNjIjtzOjA6IiI7czo5OiJtZXRhX2tleXMiO3M6MDoiIjtzOjk6InNob3dfZGF0ZSI7czoxOiIxIjtzOjU6InBob3RvIjtzOjE6IjEiO3M6NToiZW1haWwiO3M6MToiMSI7czo4OiJzaXRlX3VybCI7czoxOiIxIjtzOjQ6InJhdGUiO3M6MToiMSI7czo2OiJ2a191cmwiO3M6MToiMSI7czo2OiJmYl91cmwiO3M6MToiMSI7czoxMDoiYWZ0ZXJfdGV4dCI7czo4NDoiPHA+0KHQv9Cw0YHQuNCx0L4hJm5ic3A7PC9wPg0KPHA+0JLQsNGI0LUg0LzQvdC10L3QuNC1INCy0LDQttC90L4g0LTQu9GPINC90LDRgS48L3A+Ijt9', 7, 0, 0, 'http://trial.smdemo.ru/images/logo3.png', 1, 0, 0, 0, 0, 'YTo0OntzOjU6ImxvZ2luIjtzOjA6IiI7czo4OiJwYXNzd29yZCI7czowOiIiO3M6Njoic2VuZGVyIjtzOjA6IiI7czo1OiJkZWJ1ZyI7czoxOiIwIjt9', NULL, '', 3, 1, 0, '', '{\"not_exist_name\":\"\",\"allow_user_to_delete_orders\":\"0\"}');
+
+INSERT INTO `#PREFIX#settings_main_page` (`settings_main_page_id`, `main_page_content`, `main_page_title`, `main_page_desc`, `main_page_keys`, `main_page_text`, `main_page_tmpl`, `slogan`, `copyright`, `politika_link`, `politika_text`, `oferta_link`, `oferta_text`, `external_url`, `sidebar`, `custom_css`, `user_menu`) VALUES
+(1, 1, 'Спортивный онлайн-клуб', '', '', '', 1, '', '<strong>Все права защищены. © 2008 - 2021</strong>', 'Политика обработки персональных данных', '<div class=\"entry-header\">\r\n<h1>Политика обработки персональных данных</h1>\r\n<dl class=\"article-info\"></dl>\r\n</div>\r\n<div>\r\n<p>УТВЕРЖДЕНА&nbsp;<br />Приказ ИП ______&nbsp;<br />№ 2 от _________ г.<br />Размещена на сайте&nbsp;<br />--.--.20--- г.</p>\r\n<h4>Политика конфиденциальности</h4>\r\n<p>Настоящая Политика конфиденциальности регулирует порядок обработки и использования персональных данных физических лиц, пользующихся сервисами Сайта https://_____&nbsp;Индивидуальным предпринимателем&nbsp; ___________. (далее &mdash; Оператор).</p>\r\n<p>Передавая Оператору персональные данные посредством использования Сайта и регистрации на Сайте, Пользователь дает свое согласие (добровольное и бессрочное) на использование персональных данных на условиях, изложенных в настоящей Политике конфиденциальности. Данное согласие является сознательным. Пользователь дает согласие на обработку персональных данных свободно, своей волей и в своем интересе. Согласие не является письменным, так как Оператор не обрабатывает специальные и биометрические персональные данные. Согласие дается в соответствии с п. 1 ст. 9 Федерального закона от 27.07.2006 N 152-ФЗ (ред. от 22.02.2017) \"О персональных данных\".</p>\r\n<p>Если Пользователь не согласен с условиями настоящей Политики конфиденциальности, он обязан прекратить использование Сайта.</p>\r\n<p>Безусловным акцептом настоящей Политики конфиденциальности является начало использования Сайта Пользователем.</p>\r\n<p>Оператор может обновлять Политику по мере необходимости. Рекомендуем Пользователям периодически проверять актуальность данной Политики. Продолжая пользоваться Сайтом после изменения Политики, Вы подтверждаете согласие с внесенными изменениями.</p>\r\n<p><strong>1. Термины</strong></p>\r\n<p>1.1. Сайт - сайт, расположенный в сети Интернет по адресу https://____. Все исключительные права на Сайт и его отдельные элементы (включая программное обеспечение, дизайн) принадлежат Оператору в полном объеме. Передача исключительных прав Пользователю не является предметом настоящей Политики конфиденциальности.</p>\r\n<p>1.2. Пользователь &mdash; лицо использующее Сайт.</p>\r\n<p>1.3. Персональные данные &mdash; персональные данные Пользователя, которые Пользователь предоставляет о себе самостоятельно при Регистрации или в процессе использования Сайта.</p>\r\n<p>1.4. Обработка персональных данных - любое действие (операция) или совокупность действий (операций), совершаемых с использованием средств автоматизации или без использования таких средств с персональными данными, включая сбор, запись, систематизацию, накопление, хранение, уточнение (обновление, изменение), извлечение, использование, передачу (распространение, предоставление, доступ), обезличивание, блокирование, удаление, уничтожение персональных данных.</p>\r\n<p>1.5. Конфиденциальность персональных данных - обязательное для соблюдения Оператором или иным получившим доступ к персональным данным лицом требование не допускать их распространения без согласия субъекта персональных данных или наличия иного законного основания.</p>\r\n<p>1.6. Регистрация &mdash; заполнение Пользователем Регистрационной формы, расположенной на Сайте, путем указания необходимых сведений и выбора логина и пароля.</p>\r\n<p>1.7. Регистрационная форма &mdash; форма, расположенная на Сайте, которую Пользователь должен заполнить для прохождения Регистрации на Сайте.</p>\r\n<p><strong>2. Состав информации о Пользователях</strong></p>\r\n<p>2.1. Оператор обрабатывает следующие персональные данные:</p>\r\n<ul>\r\n<li>Имя Пользователя</li>\r\n<li>Адрес электронной почты</li>\r\n<li>Номер телефона</li>\r\n<li>Почтовый адрес</li>\r\n</ul>\r\n<p>2.2. Обработка указанных выше персональных данных осуществляется Оператором исключительно в целях заключения и исполнения договоров дистанционной продажи товаров, размещенных на Сайте. Персональные данные Оператором не распространяются и не передаются третьим лицам.</p>\r\n<p>2.3. Для получения интернет рассылки о рекламных акциях и получения рекламно-информационных материалов (направляются Пользователям для того, чтобы можно было сориентироваться и сделать правильный выбор товара) необходимо указать только имя Пользователя и Адрес электронной почты. Пользователь может в любой момент отказаться от рассылки путем направления Оператору запроса на отказ от рассылки по адресу: -----@------.ru или нажатием соответствующей кнопки &laquo;отписаться от рассылки&raquo; в теле письма рассылки.</p>\r\n<p><strong>3. Порядок обработки персональных данных</strong></p>\r\n<p>3.1. Оператор обязуется использовать Персональные данные в соответствии с Федеральным Законом &laquo;О персональных данных&raquo; № 152-ФЗ от 27 июля 2006 г. и настоящей политикой конфиденциальности.</p>\r\n<p>3.2. В отношении персональных данных Пользователя сохраняется их конфиденциальность, кроме случаев, когда указанные данные являются общедоступными.</p>\r\n<p>3.3. Оператор имеет право хранить персональные только на серверах на территории Российской Федерации.</p>\r\n<p>3.4. Оператор имеет право передавать персональные данные Пользователя без согласия Пользователя следующим лицам:</p>\r\n<p>3.4.1 государственным органам, в том числе органам дознания и следствия, и органам местного самоуправления по их мотивированному запросу;</p>\r\n<p>3.4.2 в иных случаях, прямо предусмотренных действующим законодательством РФ.</p>\r\n<p>3.5. Оператор имеет право передавать персональные данные третьим лицам, не указанным в п. 3.4. настоящей Политики конфиденциальности, в следующих случаях:</p>\r\n<p>3.5.1 Пользователь выразил свое согласие на такие действия;</p>\r\n<p>3.5.2 передача необходима в рамках использования Пользователем Сайта или оказания Услуг Пользователю;</p>\r\n<p>3.5.3 передача происходит в рамках продажи или иной передачи бизнеса (полностью или в части), при этом к приобретателю переходят все обязательства по соблюдению условий настоящей Политики.</p>\r\n<p>3.6. Оператор осуществляет автоматизированную обработку персональных данных.</p>\r\n<p><strong>4. Права и обязанности Пользователя</strong></p>\r\n<p>4.1. Пользователь обязуется не сообщать третьим лицам логин и пароль, используемые им для идентификации на Сайте.</p>\r\n<p>4.2. Пользователь обязуется соблюдать должную осмотрительность при хранении пароля, при его вводе.</p>\r\n<p>4.3. Пользователь обязуется при регистрации на Сайте использовать сложные сочетания символов для создания логина/пароля.</p>\r\n<p>4.4. Пользователь обязуется не предоставлять третьим лицам в пользование компьютерное устройство в случае, если с него возможен свободный доступ к личному кабинету Пользователя.</p>\r\n<p>4.5. Пользователь гарантирует, что все персональные данные являются актуальными и не относятся к третьим лицам.</p>\r\n<p>4.6. Пользователь вправе изменять, удалять свои персональные данные. Персональные данные Пользователь может редактировать в создаваемом при регистрации профиле.</p>\r\n<p><strong>5. Защита персональных данных</strong></p>\r\n<p>5.1. Оператор осуществляет надлежащую защиту персональных данных в соответствии с законодательством РФ и принимает необходимые и достаточные организационные и технические меры для защиты персональных данных.</p>\r\n<p>5.2. Для обеспечения безопасности персональных данных при их обработке Оператор принимает меры для защиты персональных данных от неправомерного или случайного доступа к ним, их уничтожения, изменения, блокирования, копирования, предоставления, распространения, а также от иных неправомерных действий в отношении персональных данных.</p>\r\n<p>5.3. В целях обеспечения информационной безопасности Оператором предпринимаются следующие меры для защиты персональной информации:</p>\r\n<ul>\r\n<li>обязательное использование брандмауэров, антивирусных систем;</li>\r\n<li>резервное копирование данных;</li>\r\n<li>использование стандартных отраслевых мер безопасности.</li>\r\n</ul>\r\n<p>Персональная информация хранится на сервере компании и может быть использована для последующего информирования клиентов о новых акциях и услугах, а также для проведения маркетинговых, статистических и иных исследований.</p>\r\n<p><strong>6. Cookies</strong></p>\r\n<p>6.1. Оператор использует файлы &laquo;cookies&raquo;. Файлы &laquo;cookies&raquo; &ndash; это небольшие текстовые файлы, размещаемые на жестких дисках устройств Пользователей во время использования различных сайтов, предназначенные для содействия в настройке пользовательского интерфейса в соответствии с предпочтениями Пользователей.</p>\r\n<p>6.2. Большинство браузеров позволяют отказаться от получения файлов &laquo;cookies&raquo; и удалить их с жесткого диска устройства.</p>\r\n<p><strong>7. Иные положения</strong></p>\r\n<p>7.1. К настоящей Политике конфиденциальности и отношениям между Пользователем и Оператором, возникающим в связи с применением Политики конфиденциальности, подлежит применению право Российской Федерации.</p>\r\n<p>7.2. Все возможные споры, вытекающие из настоящего Соглашения, подлежат разрешению в соответствии с действующим законодательством по месту регистрации Оператора.</p>\r\n<p>Перед обращением в суд Пользователь должен соблюсти обязательный досудебный порядок и направить Оператору соответствующую претензию в письменном виде. Срок ответа на претензию составляет 30 (тридцать) рабочих дней.</p>\r\n<p>7.3. Если по тем или иным причинам одно или несколько положений Политики конфиденциальности будут признаны недействительными или не имеющими юридической силы, это не оказывает влияния на действительность или применимость остальных положений Политики конфиденциальности.</p>\r\n<p>7.4. Оператор имеет право в любой момент изменять Политику конфиденциальности (полностью или в части) в одностороннем порядке без предварительного согласования с Пользователем. Все изменения вступают в силу на следующий день после размещения на Сайте.</p>\r\n<p>7.5. Пользователь обязуется самостоятельно следить за изменениями Политики конфиденциальности путем ознакомления с актуальной редакцией.</p>\r\n<p><strong>8. Контактная информация Оператора</strong></p>\r\n<p>8.1. Индивидульный предприниматель ____________ (ОГРНИП ___________)</p>\r\n<p>8.2. Телефон: +7-------</p>\r\n<p>8.3. E-mail: ------</p>\r\n<p>8.4. Адрес: ________</p>\r\n</div>', 'Договор оферты', '<div class=\"entry-header\">\r\n<h1>Договор оферты</h1>\r\n<dl class=\"article-info\"></dl>\r\n</div>\r\n<div>\r\n<p>ДОГОВОР НА РЕАЛИЗАЦИЮ ИНФОРМАЦИОННОГО ПРОДУКТА</p>\r\n<p>Индивидуальный предприниматель ________________ в лице ______________, действующего на основании Свидетельства о государственно регистрации, с одной стороны, и акцептовавший оферту, постоянно размещенную в сети Интернет по сетевому адресу https://____________,&nbsp;пользователь сайта в сети Интернет https://_______ (а также иных нишевых сайтов _____ИП______&nbsp; заключили настоящий договор на реализацию информационного продукта о нижеследующем.</p>\r\n<h4>1. Термины и определения</h4>\r\n1. В настоящем договоре на реализацию информационного продукта, если из текста прямо не вытекает иное, следующие термины будут иметь указанные ниже значения:\r\n<p><strong>&laquo;Видеокурс&raquo;, &laquo;Информационный продукт&raquo;</strong></p>\r\n<p>Оказываемые Исполнителем Потребителям информационные услуги по предоставлению доступа к вебинарам, обучающим онлайн тренингам, информационным курсам, а также сопутствующие и/или самостоятельные услуги по реализации информационных материалов Исполнителя любым технически разрешенным способом (диски, рассылки, индивидуальные ссылки для скачивания и т.д.).</p>\r\n<p><strong>&laquo;Вебинар&raquo;</strong></p>\r\n<p>Оказание информационных услуг, осуществляемое посредством удаленного доступа через сеть Интернет, проходящее в режиме реального времени. Вебинар может проводиться в форме видео или аудиотрансляции, обмена сообщениями, в иных формах. Вебинар может предусматривать возможность осуществления обратной связи с лицом, оказывающим информационные услуги.</p>\r\n<p><strong>&laquo;Диск&raquo;</strong></p>\r\n<p>Совокупность информационных материалов (текстов, изображений, аудиозаписей, аудиовизуальных документов) в электронной форме, записанных на CD или DVD &ndash; носитель.</p>\r\n<p><strong>&laquo;Индивидуальная ссылка&raquo;</strong></p>\r\n<p>Уникальная гипертекстовая ссылка, позволяющая осуществить получить доступ к Объекту реализации однократно или ограниченное количество раз.</p>\r\n<p><strong>&laquo;Информационный курс&raquo;</strong></p>\r\n<p>Совокупность информационных материалов (текстов, изображений, аудиозаписей, аудиовизуальных документов, интеллект-карт) в электронной форме. Атрибуты файлов, содержащих Информационный курс, указываются на Сайте.</p>\r\n<p><strong>&laquo;Исполнитель&raquo;</strong></p>\r\n<p>Индивидуальный предприниматель __________________ ИНН 434540800305, ОГРНИП ____________, адрес для корреспонденции: Российская Федерация, индекс ____, Город, адрес. Если иное не запрещено законом, Исполнитель вправе привлекать для оказания услуг по настоящему Договору любых третьих лиц, оставаясь ответственным за их действия.</p>\r\n<p><strong>&laquo;Объект реализации&raquo;</strong></p>\r\n<p>Вебинар, Информационный курс, Диск, обучающий онлайн тренинг, электронные книги, видеокурсы и иные подобные выраженные в объективной форме обучающие материалы, реализуемые Исполнителем. Стоимость Объекта реализации указывается на Сайте.</p>\r\n<p><strong>&laquo;Потребитель&raquo;</strong></p>\r\n<p>Любое лицо, оплатившее стоимость Объекта реализации, в порядке, предусмотренном Договором. В случае если действия, указанные в пункте 2 Договора, фактически совершены другим лицом, считается, что такое лицо действовало в интересах Потребителя.</p>\r\n<p><strong>&laquo;Сайт&raquo;</strong></p>\r\n<p>Совокупность программ для электронных вычислительных машин и иной информации, содержащейся в информационной системе, доступ к которой обеспечивается через сеть Интернет по сетевому адресу https://______ (а также иных сайтов --- ИП ----).</p>\r\n<p><strong>&laquo;Служба доставки&raquo;</strong></p>\r\n<p>Почта России либо иные компании, осуществляющие курьерскую доставку (Pony Express, DHL и т.д.).</p>\r\n<p><strong>&laquo;Стороны&raquo;</strong></p>\r\n<p>Исполнитель и Потребитель.</p>\r\n<p><strong>&laquo;Уведомление о заключении Договора&raquo;</strong></p>\r\n<p>Сообщение, направляемое Исполнителем Потребителю и подтверждающее факт заключения Договора, а также содержащее информацию, необходимую для получения Потребителем Объекта реализации.</p>\r\n<p>Все остальные термины и определения, встречающиеся в тексте Договора, толкуются Сторонами в соответствии с действующим законодательством Российской Федерации.</p>\r\n<p>Названия заголовков (статей) Договора предназначены исключительно для удобства пользования текстом Договора и буквального юридического значения не имеют.</p>\r\n<h4>2. Порядок заключения Договора</h4>\r\n<p>2.1. Текст Договора, постоянно размещенный в сети Интернет по сетевому адресу https://_______, содержит все существенные условия Договора и является предложением Исполнителя, заключить Договор с любым третьим лицом, использующим Сайт, на указанных в тексте Договора условиях. Таким образом, в соответствии с положениями пункта 2 статьи 437 Гражданского кодекса Российской Федерации, текст Договора является публичной офертой. Актуальная стоимость Объекта реализации указывается на странице конкретного объекта реализации.</p>\r\n<p>2.2. Акцепт оферты, указанной в пункте 2.1 Договора, осуществляется Потребителем посредством последовательного осуществления следующих действий:</p>\r\n<p>2.2.1. выбор Объекта реализации посредством нажатия кнопки &laquo;Заказать&raquo; (или кнопки с другим названием, но явно имеющей то же назначение, например &laquo;Купить&raquo;, &laquo;Приобрести&raquo; и т.д.) на соответствующей странице Сайта;</p>\r\n<p>2.2.2. внесение в форму заказа, которая появляется на Сайте после выбора Объекта реализации, сведений о Потребителе, в том числе имени Потребителя, адреса электронной почты, а также иных сведений, необходимость внесения которых предусмотрена соответствующей формой заказа;</p>\r\n<p>2.2.3. установка ЗАКАЗЧИКОМ галочки в графе &laquo;Я согласен с условиями публичной оферты&raquo;, а также последующим нажатием ЗАКАЗЧИКОМ кнопки &laquo;Продолжить&raquo;;</p>\r\n<p>2.2.4. нажатие кнопки &laquo;Заказать&raquo; (или кнопки с другим названием, но явно имеющей то же назначение, например &laquo;Купить&raquo;, &laquo;Приобрести&raquo; и т.д.) в заполненной форме заказа. При этом нажатием кнопки &laquo;Заказать&raquo; (или кнопки с другим названием, но явно имеющей то же назначение, например &laquo;Купить&raquo;, &laquo;Приобрести&raquo; и т.д.) Потребитель подтверждает факт ознакомления и безоговорочного согласия с условиями Договора;</p>\r\n<p>2.2.4. оплата стоимости Объекта реализации посредством заполнения специальной формы оплаты Объекта реализации и совершения всех действий, необходимых для перечисления оплаты стоимости Объекта реализации Исполнителю.</p>\r\n<p>2.3. Договор считается заключенным и вступает в силу с момента оплаты Потребителем стоимости соответствующего Объекта реализации. Оплата вносится в размере 100% предоплаты (иной порядок оплаты возможен в соответствии с условиями проведения акций (специальное предложение), а также в случаях после дополнительного согласования с ИСПОЛНИТЕЛЕМ. Оплата осуществляется с помощью сервисов интернет-эквайринга, доступных на Сайте. Датой оплаты считается дата поступления денежных средств на расчетный счет ИСПОЛНИТЕЛЯ, либо дата поступления денежных средств на счет платёжной системы, с которой заключен соответствующий договор с ИСПОЛНИТЕЛЕМ.</p>\r\n<p>2.4. В подтверждение заключения Договора Потребителю на адрес электронной почты, указанный в форме заказа в соответствии с пунктом 2.2.3 Договора, в течение 1 (одного) рабочего дня с момента оплаты стоимости Объекта реализации направляется Уведомление об успешном заказе, являющееся также уведомлением о заключении Договора.</p>\r\n<h4>3. Предмет Договора</h4>\r\n<p>3.1 Предметом настоящего Договора является предоставление ИСПОЛНИТЕЛЕМ информационно-обучающих услуг в виде предоставления доступа к обучающим программам проекта https://joomlac.center, а также послепродажной поддержки и онлайн-консультаций проводимых с использованием сети интернет ЗАКАЗЧИКУ. С подробным описанием обучающих программ ЗАКАЗЧИК может ознакомиться на сайте ИСПОЛНИТЕЛЯ в каталоге обучающих программ по адресу https://_______</p>\r\n<h4>4. Предоставление доступа к сайту и информационному продукту</h4>\r\n<p>4.1. После покупки Потребителю на е-маил, указанный в процессе оформления заказа, отправляются данные для входа на закрытый сайт.</p>\r\n<p>4.2. Для получения информационного продукта Потребитель должен перейти по Индивидуальной ссылке, содержащейся в письме, ввести выданный логин и пароль. Потребитель самостоятельно обеспечивает себя оборудованием, необходимым для доступа к сайту и просмотра информации.</p>\r\n<p>4.3. В случае не использования доступа к сайту, в течении 2-х лет со дня покупки, по причинам, не зависящим от Исполнителя, Потребитель не вправе требовать бесплатного продления доступа. При этом информационные услуги считаются оказанными надлежащим образом.</p>\r\n<p>4.4 Техническая поддержка, ответы на вопросы, предоставляется в течение 2-х лет с момента покупки. Ответы предоставляются не позднее, чем в течение 24-х часов с момента подачи вопроса. Исключения по срокам ответа составляют выходные и праздничные дни, поддержка в эти дни не оказывается. Срок ответа может быть увеличен если требуются дополнительное время на разбор сайта проблемы и (или) сайта клиента.</p>\r\n<p>4.5. Исполнитель вправе приостановить оказание услуг в случае некорректного поведения Потребителя, мешающего обучению других пользователей или из-за передачи данных с сайта и доступа третьим лицам. Стоимость продукта, в ходе которого оказание услуг было приостановлено, не возмещается.</p>\r\n<p>4.6. Исполнитель вправе защищать информационный продукт с помощью сервиса Инфопротектор. В этом случае для доступа к информационному продукту прилагается лицензионный ключ. Ограничения при просмотре курса с использованием защиты инфопротектор.</p>\r\n<p>4.6.1. Курс запускается на компьютерах под операционной системой Windows 7, Windows 8, Windows 10 и операционных системах семейства Mac Os X.</p>\r\n<p>4.6.2. На планшентах и мобильных устройствах под ios и Android, а так же под виртуальной машиной защищенный курс не будет работать.</p>\r\n<p>4.6.3. Изначально предоставляется 5 активаций курса на разных устройствах. Если нужно больше, то количество активаций можно увеличить через обращение к службе поддержки.</p>\r\n<p>4.6.4. Если пользователь не прочитал, не знал о защите и курс не запускается или же наличие защиты не устраивает пользователя, он вправе вернуть деньги согласно пункту 9.1.</p>\r\n<h4>5. Передача Информационного курса</h4>\r\n<p>5.1. Передача Информационного курса осуществляется в течение 1 дня с момента заключения Договора посредством:</p>\r\n<p>5.1.1. направления Потребителю в Уведомлении о заказе Индивидуальной ссылки для скачивания Информационного курса или;</p>\r\n<p>5.1.2. направления Информационного курса по адресу электронной почты, указанному в форме заказа в соответствии с пунктом 2.2.3 Договора.</p>\r\n<p>5.2. Для получения Информационного курса в соответствии с пунктом 5.1.1 Договора Потребитель с момента получения Индивидуальной ссылки переходит по Индивидуальной ссылке, после чего Потребитель может осуществить скачивание Информационного курса. С момента перехода Потребителя по Индивидуальной ссылке обязательства Исполнителя по передаче Информационного курса считаются исполненными.</p>\r\n<p>5.3. В случае если передача Информационного курса осуществляется в порядке,предусмотренном пунктом 5.1.2 Договора, Информационный курс считается переданным с момента отправки Исполнителем электронного письма, содержащего Информационный курс, по адресу, указанному в форме заказа в соответствии спунктом 2.2.3 Договора.</p>\r\n<p>5.4. Потребитель самостоятельно обеспечивает себя оборудованием, необходимым дляскачивания и использования Информационного курса, с минимальными техническими характеристиками, указанными в Уведомлении о заключении Договора.</p>\r\n<p>5.5. Содержание Информационного курса определяется Исполнителем и должно соответствовать описанию Информационного курса, представленному на Сайте.</p>\r\n<p>5.6. Потребитель несет риски использования Индивидуальной ссылки третьими лицами без согласия Потребителя в случае, если такое использование стало возможным в результате непринятия Потребителем соответствующих мер предосторожности, в том числе непринятия мер по обеспечению конфиденциальности пароля к адресу электронной почты, на которую была отправлена Индивидуальная ссылка.</p>\r\n<h4>6. Права на результаты интеллектуальной деятельности</h4>\r\n<p>6.1. Все информационные материалы, предоставляемые ИСПОЛНИТЕЛЕМ ЗАКАЗЧИКУ в процессе обучения, являются результатом интеллектуальной деятельности, исключительное авторское право, в том числе смежные с авторским права принадлежат ИСПОЛНИТЕЛЮ.</p>\r\n<p>6.2. Использование результатов интеллектуальной деятельности без письменного согласия ИСПОЛНИТЕЛЯ является нарушением исключительного права ИСПОЛНИТЕЛЯ, что влечет за собой гражданскую, административную и иную ответственность в соответствии с действующим законодательством Российской Федерации.</p>\r\n<p>6.3. ЗАКАЗЧИК не имеет права распространять аудио и видеоматериалы обучающих программ ИСПОЛНИТЕЛЯ. Распространение будет считаться нарушением исключительного права ИСПОЛНИТЕЛЯ и влечет за собой гражданскую, административную и иную ответственность в соответствии с действующим законодательством Российской Федерации.</p>\r\n<h4>7. Ответственность сторон</h4>\r\n<p>7.1. В случаях неисполнения или ненадлежащего исполнения своих обязательств по Договору, Стороны несут ответственность в соответствии с законодательством РФ с учетом условий настоящего Договора.</p>\r\n<p>7.2. ИСПОЛНИТЕЛЬ не несет ответственности за достижение каких-либо результатов, связанных с практическим применением информации, предоставляемой в обучающей программе ИСПОЛНИТЕЛЯ. Любые рекомендации, выдаваемые в рамках любой обучающей программы ИСПОЛНИТЕЛЯ, осуществляются ЗАКАЗЧИКОМ на свой риск.</p>\r\n<p>7.3. ИСПОЛНИТЕЛЬ не несет ответственности за несоответствие предоставленной услуги ожиданиям ЗАКАЗЧИКА и/или за его субъективную оценку, такое несоответствие ожиданиям и/ или отрицательная субъективная оценка не являются основаниями считать услуги оказанными не качественно, или не в согласованном объеме.</p>\r\n<p>7.4. ИСПОЛНИТЕЛЬ освобождается от ответственности за полное или частичное неисполнение обязательств, предусмотренных настоящим Договором, если это неисполнение явилось следствием обстоятельств непреодолимой силы, возникших после заключения Договора, в результате событий чрезвычайного характера, которые Стороны не могли ни предвидеть, ни предотвратить разумными мерами (форс-мажор).</p>\r\n<h4>8. Разрешение споров</h4>\r\n<p>8.1. Все споры и разногласия, возникшие в связи с исполнением настоящего Договора, решаются Сторонами путем переговоров.</p>\r\n<p>8.2. В случае невозможности разрешения спора путем переговоров, он будет передан Сторонами на рассмотрение Арбитражного суда г._____________.</p>\r\n<h4>9. Возврат денежных средств</h4>\r\n<p>9.1. Потребитель вправе в течение 30 (тридцати) календарных дней с момента завершения оказания услуг по проведению Вебинара, момента исполнения обязательств по передаче Информационного курса или Диска требовать возврата стоимости Объекта реализации. При этом Потребитель должен возместить Исполнителю расходы по доставке материального носителя.</p>\r\n<p>9.2. Для возврата стоимости Объекта реализации в соответствии с пунктом 9.1 Договора Потребитель обязан в письменной форме заказным письмом с описью вложения и уведомлением о вручении отправить Исполнителю соответствующее заявление с указанием:</p>\r\n<p>9.2.1. фамилии, имени, отчества Потребителя (при этом Исполнитель вправе затребовать у Потребителя предоставления копии документа, удостоверяющего личность Потребителя);</p>\r\n<p>9.2.2. даты заключения Договора (приобретения курса);</p>\r\n<p>9.2.3. Объектов реализации, стоимость которых подлежит возврату.</p>\r\n<p>9.3. Возврат денежных средств в случаях, предусмотренных Договором, осуществляется на банковский счет (электронный кошелек или другой способ оплаты) Потребителя, с которого денежные средства были перечислены Исполнителю, в течение 10 (десяти) рабочих дней с момента возникновения оснований для возврата.</p>\r\n<p>9.4. В случае невозможности возврата денежных средств способом, предусмотренным пунктом 9.3 Договора, Исполнитель уведомляет об этом Потребителя в течение срока, установленного пунктом 9.3 Договора. В этом случае возврат денежных средств осуществляется в месте нахождения Исполнителя по требованию Потребителя, либо иным способом, дополнительно согласованном Сторонами.</p>\r\n<p>9.5. В том случае, если ЗАКАЗЧИК потребовал возврат средств за оплаченную им обучающую программу, то при возврате денежных средств доступ к этой обучающей программе в личном кабинете клиента блокируется.</p>\r\n<h4>10. Обстоятельства непреодолимой силы</h4>\r\n<p>10.1. Стороны освобождается от ответственности за неисполнение или ненадлежащее исполнение обязательств, вытекающих из Договора, если причиной неисполнения (ненадлежащего исполнения) являются обстоятельства непреодолимой силы, к которым, среди прочих, относятся стихийные бедствия, пожары, техногенные аварии и катастрофы, аварии на инженерных сооружениях и коммуникациях, массовые беспорядки, военные действия, террористические акты, бунты, гражданские волнения, забастовки, нормативные акты органов государственной власти и местного самоуправления, препятствующие исполнению Сторонами своих обязательств по Договору, то есть чрезвычайные и непреодолимые при данных условиях обстоятельства, независящие от воли Сторон, наступившие после подписания Договора.</p>\r\n<p>10.2. При наступлении обстоятельств непреодолимой силы срок исполнения обязательств по настоящему Договору отодвигается соразмерно времени, в течение которого продолжают действовать такие обстоятельства, без возмещения каких-либо убытков.</p>\r\n<p>10.3. Если обстоятельства непреодолимой силы, от которых пострадали Стороны, длятся более 3 (трех) месяцев подряд, то Стороны вправе отказаться от исполнения обязательств по Договору на указанном основании.</p>\r\n<h4>11. Конфиденциальность</h4>\r\n<p>11.1. Стороны обязуется не разглашать конфиденциальную информацию по настоящему Договору третьим лицам, за исключением случаев, предусмотренных действующим законодательством РФ.</p>\r\n<h4>12. Обработка персональных данных Потребителя</h4>\r\n<p>12.1. Заключая Договор и внося персональные данные в форму заказа, Потребитель дает свое согласие на их обработку на условиях, указанных в политике обработки персональных данных.</p>\r\n<p>12.2. Кроме того, настоящим Потребитель соглашается получать от Исполнителя информацию, в том числе, являющуюся рекламой, по указанным в форме заказа номеру телефона и адресу электронной почты.</p>\r\n<h4>13. Срок действия, изменение и прекращение Договора</h4>\r\n<p>13.1. Договор вступает в силу с момента его акцепта и действует до полного исполнения Сторонами своих обязательств.</p>\r\n<p>13.2. Настоящий Договор может быть расторгнут потребителем с предварительным уведомление исполнителя за тридцать календарных дней до предполагаемой даты расторжения договора.</p>\r\n<p>13.3. Настоящий договор может быть расторгнут исполнителем без объяснения причин потребителю и возврата стоимости уплаченной за курс.</p>\r\n<p>13.4. Прекращение действия настоящего Договора не может являться основанием для отказа от завершения расчетов по нему.</p>\r\n<p>13.5. Стороны соглашаются, что Договор может быть изменен Исполнителем в одностороннем порядке путем размещения обновленного текста Договора в сети Интернет по адресу http://____________ Потребитель подтверждает свое согласие с изменениями условий Договора путем использования Сайта.</p>\r\n<h4>14. Адрес и реквизиты исполнителя</h4>\r\n<p>Индивидульный предприниматель ____________<br />ОГРНИП _________<br />Телефон: _________<br />E-mail: _____________<br />Юридический адрес: ___________<br />Служба поддержки: ____________</p>\r\n</div>', '', 'right', '.avatar-img {\r\nborder: 2px solid #E04265 !important;\r\n}', NULL);
+
+INSERT INTO `#PREFIX#ship_methods` (`method_id`, `title`, `ship_desc`, `tax`, `status`) VALUES
+(1, 'Почта РФ', 'Доставка почтой России.', 300, 1),
+(2, 'СДЭК', 'Транспортная компания СДЭК', 250, 1),
+(3, 'Доставка курьером', 'Доставка до квартиры или офиса.', 1000, 1);
+
+INSERT INTO `#PREFIX#training_page_settings` (`setting_id`, `params`) VALUES
+(1, '{\"params\":{\"show_list\":\"without_categories\",\"categories_to_content\":[\"1\"],\"template\":\"3columns\",\"filter\":[\"access\",\"category\",\"author\"]}}');

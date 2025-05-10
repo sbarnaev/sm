@@ -1,0 +1,2 @@
+INSERT INTO `hda_extensions` (`name`, `title`, `type`, `enable`, `params`, `link`, `version`, `update_url`) VALUES
+('getfunnels', 'GetFunnels', 'system', 0, 'a:1:{s:6:"params";a:2:{s:12:"account_name";s:0:"";s:10:"secret_key";s:0:"";}}', 'getfunnelssetting', '2.2.4', NULL);

@@ -1,0 +1,74 @@
+.progressbar-wrap {
+  display: none;
+  width: 100%;
+  height: 332px;
+  z-index: 99999;
+  position: fixed;
+  margin: auto;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
+.progressbar-block {
+  z-index: 10;
+  max-width: 727px;
+  margin: 0 auto;
+  padding: 28px 25px 25px;
+  border-radius: 11px;
+  box-shadow: 0 4px 20px 0 rgba(6, 54, 70, .15);
+  box-sizing: border-box;
+  text-align: center;
+  background-color: #fff;
+  position: relative;
+}
+.progressbar-table {
+   text-align: left;
+   font-size:24px;
+   width: 100%;
+}
+.progressbar-table th, .progressbar-table td {
+    border-style: inherit;
+
+}
+.progressbar-container {
+  width: 70%;
+  margin: 55px auto;
+}
+
+.progressbar-track {
+  height: 19px;
+  background: #edf2f5;
+  border-radius: 9px;
+  overflow: hidden;
+  position: relative;
+}
+
+.progressbar-loader {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  border-radius: 9px;
+  background-image: url('/lib/progressbar/images/progressbar-loader.jpg');
+  background-position: 0 0;
+  background-size: auto 19px;
+  -webkit-animation: progressbar 2s infinite linear;
+  -moz-animation: progressbar 2s infinite linear;
+  -ms-animation: progressbar 2s infinite linear;
+  -o-animation: progressbar 2s infinite linear;
+  animation: progressbar 2s infinite linear;
+}
+
+@-webkit-keyframes progressbar { 0% {background-position: 0 0;} 100% {background-position: 75px 0;} }
+@-moz-keyframes progressbar { 0% {background-position: 0 0;} 100% {background-position: 75px 0;} }
+@-ms-keyframes progressbar { 0% {background-position: 0 0;} 100% {background-position: 75px 0;} }
+@-o-keyframes progressbar { 0% {background-position: 0 0;} 100% {background-position: 75px 0;} }
+@keyframes progressbar { 0% {background-position: 0 0;} 100% {background-position: 75px 0;} }
+
+.progressbar-counter {
+  padding-top: 10px;
+  color: #000;
+  font-size:24px;
+  text-align: center;
+}

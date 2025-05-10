@@ -1,0 +1,17 @@
+User-agent: *
+Disallow: /components
+Disallow: /config
+Disallow: /controllers
+Disallow: /lang
+Disallow: /lib
+Disallow: /load
+Disallow: /models
+Disallow: /payments
+Disallow: /task
+Disallow: /template/
+Disallow: /vendor
+Disallow: /tmp
+Allow: /template/simple/images
+Allow: /template/simple/js
+Allow: /template/simple/css
+Clean-param: pr /

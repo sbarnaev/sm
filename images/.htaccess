@@ -1,0 +1,13 @@
+# Для дополнительной защиты раскомментируйте строки ниже
+# Для apache 2.0 - 2.2
+#
+#<Files ~ "\.(php|cgi|pl|php3|php4|php5|php6|phps|phtml|shtml|py)$">
+#Deny from all
+#</Files>
+#
+#
+# Для apache 2.4
+#
+#<Files ~ "\.(php|cgi|pl|php3|php4|php5|php6|phps|phtml|shtml|py)$">
+#Require all denied
+#</Files>
