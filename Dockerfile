@@ -1,6 +1,8 @@
 # Используем официальный образ PHP 7.2 + Apache
 FROM php:7.2-apache
 
+RUN git config --global --add safe.directory /var/www/html
+
 # Устанавливаем ionCube Loader
 RUN curl -o ioncube.tar.gz https://downloads.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.tar.gz \
     && tar -xzvf ioncube.tar.gz \
@@ -28,8 +30,6 @@ RUN sed -i 's/Listen 80/Listen 8086/' /etc/apache2/ports.conf && \
     sed -i 's/<VirtualHost \*:80>/<VirtualHost \*:8086>/' /etc/apache2/sites-available/000-default.conf
 
 EXPOSE 8086
-
-RUN git config --global --add safe.directory /var/www/html
 
 # Копируем файлы проекта
 COPY . /var/www/html/
