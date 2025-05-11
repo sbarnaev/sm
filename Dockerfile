@@ -1,15 +1,19 @@
 # Используем официальный образ PHP 7.2 + Apache
 FROM php:7.2-apache
 
+# 1. Сначала устанавливаем Git
+RUN apt-get update && apt-get install -y git && rm -rf /var/lib/apt/lists/*
+
+# 2. Затем настраиваем безопасную директорию
 RUN git config --global --add safe.directory /var/www/html
 
-# Устанавливаем ionCube Loader
+# 3. Устанавливаем ionCube Loader
 RUN curl -o ioncube.tar.gz https://downloads.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.tar.gz \
     && tar -xzvf ioncube.tar.gz \
     && mv ioncube/ioncube_loader_lin_7.2.so /usr/local/lib/php/extensions/*/ \
     && echo "zend_extension=ioncube_loader_lin_7.2.so" > /usr/local/etc/php/conf.d/00-ioncube.ini \
     && rm -rf ioncube.tar.gz ioncube
-
+    
 # Добавьте эти строки для ZIP:
 RUN apt-get update && apt-get install -y \
     libzip-dev \
