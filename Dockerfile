@@ -1,12 +1,6 @@
 # Используем официальный образ PHP 7.2 + Apache
 FROM php:7.2-apache
 
-# 1. Сначала устанавливаем Git
-RUN apt-get update && apt-get install -y git && rm -rf /var/lib/apt/lists/*
-
-# 2. Затем настраиваем безопасную директорию
-RUN git config --global --add safe.directory /var/www/html
-
 # 3. Устанавливаем ionCube Loader
 RUN curl -o ioncube.tar.gz https://downloads.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.tar.gz \
     && tar -xzvf ioncube.tar.gz \
@@ -28,7 +22,6 @@ RUN apt-get update && apt-get install -y \
 
 # Устанавливаем Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-
 
 # Копируем файлы проекта
 COPY . /var/www/html/
