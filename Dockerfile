@@ -29,6 +29,8 @@ RUN sed -i 's/Listen 80/Listen 8086/' /etc/apache2/ports.conf && \
 
 EXPOSE 8086
 
+RUN git config --global --add safe.directory /var/www/html
+
 # Копируем файлы проекта
 COPY . /var/www/html/
 
