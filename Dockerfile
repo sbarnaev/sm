@@ -23,11 +23,11 @@ RUN apt-get update && apt-get install -y \
 # Устанавливаем Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-# Настраиваем Apache на порт 8080
-RUN sed -i 's/Listen 80/Listen 8080/' /etc/apache2/ports.conf && \
-    sed -i 's/<VirtualHost \*:80>/<VirtualHost \*:8080>/' /etc/apache2/sites-available/000-default.conf
+# Настраиваем Apache на порт 8086
+RUN sed -i 's/Listen 80/Listen 8086/' /etc/apache2/ports.conf && \
+    sed -i 's/<VirtualHost \*:80>/<VirtualHost \*:8086>/' /etc/apache2/sites-available/000-default.conf
 
-EXPOSE 8080
+EXPOSE 8086
 
 # Копируем файлы проекта
 COPY . /var/www/html/
